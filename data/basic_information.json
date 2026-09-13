@@ -1,0 +1,201 @@
+[
+  {
+    "id": "e1_87ae895894e0",
+    "country": {
+      "zh": "中国",
+      "en": "",
+      "de": ""
+    },
+    "category": {
+      "zh": "电动工具",
+      "en": "",
+      "de": ""
+    },
+    "product": {
+      "zh": "电锤",
+      "en": "",
+      "de": ""
+    },
+    "powerType": "Corded",
+    "example": [
+      "assets/generated/enter1/e1_87ae895894e0_example_01.png"
+    ],
+    "model": "GBH6-42VB",
+    "bareModel": "3611B78180",
+    "specs": "220V 50Hz 1300W",
+    "dateCode": "MM/YYYY",
+    "cert": [
+      "assets/generated/enter1/e1_87ae895894e0_cert_01.png"
+    ],
+    "eco": [
+      "assets/generated/enter1/e1_87ae895894e0_eco_01.png",
+      "assets/generated/enter1/e1_87ae895894e0_eco_02.png"
+    ],
+    "origin": [
+      "assets/generated/enter1/e1_87ae895894e0_origin_01.png"
+    ],
+    "class2": [
+      "assets/generated/enter1/e1_87ae895894e0_class2_01.png"
+    ],
+    "manufacturer": [
+      "assets/generated/enter1/e1_87ae895894e0_manufacturer_01.png"
+    ],
+    "weee": [
+      "assets/generated/enter1/e1_87ae895894e0_weee_01.png"
+    ],
+    "manual": [
+      "assets/generated/enter1/e1_87ae895894e0_manual_01.png"
+    ],
+    "ip": "",
+    "protect": [],
+    "other": []
+  },
+  {
+    "id": "e1_d633ddd1a01f",
+    "country": {
+      "zh": "欧盟",
+      "en": "",
+      "de": ""
+    },
+    "category": {
+      "zh": "电动工具",
+      "en": "",
+      "de": ""
+    },
+    "product": {
+      "zh": "角磨",
+      "en": "",
+      "de": ""
+    },
+    "powerType": "Cordless",
+    "example": [
+      "assets/generated/enter1/e1_d633ddd1a01f_example_01.png"
+    ],
+    "model": "GWS 18V-15 S",
+    "bareModel": "3601JM6002",
+    "specs": "18V n0=3400-11000 min-1 ø125mm M14",
+    "dateCode": "MM/YYYY",
+    "cert": [
+      "assets/generated/enter1/e1_d633ddd1a01f_cert_01.png"
+    ],
+    "eco": [],
+    "origin": [
+      "assets/generated/enter1/e1_d633ddd1a01f_origin_01.png"
+    ],
+    "class2": [],
+    "manufacturer": [
+      "assets/generated/enter1/e1_d633ddd1a01f_manufacturer_01.png"
+    ],
+    "weee": [
+      "assets/generated/enter1/e1_d633ddd1a01f_weee_01.png"
+    ],
+    "manual": [
+      "assets/generated/enter1/e1_d633ddd1a01f_manual_01.png"
+    ],
+    "ip": "",
+    "protect": [
+      "assets/generated/enter1/e1_d633ddd1a01f_protect_01.png"
+    ],
+    "other": [
+      "assets/generated/enter1/e1_d633ddd1a01f_other_01.png"
+    ]
+  },
+  {
+    "id": "e1_004ae792188b",
+    "country": {
+      "zh": "欧盟",
+      "en": "",
+      "de": ""
+    },
+    "category": {
+      "zh": "家用电器",
+      "en": "",
+      "de": ""
+    },
+    "product": {
+      "zh": "吸尘器",
+      "en": "",
+      "de": ""
+    },
+    "powerType": "Corded",
+    "example": [
+      "assets/generated/enter1/e1_004ae792188b_example_01.png"
+    ],
+    "model": "GAS 12-25 PL",
+    "bareModel": "3601J7C1K0",
+    "specs": "220-240V 50-60Hz 5A 1250W 10Kg Total：3300W",
+    "dateCode": "MM/YYYY",
+    "cert": [
+      "assets/generated/enter1/e1_004ae792188b_cert_01.png"
+    ],
+    "eco": [],
+    "origin": [
+      "assets/generated/enter1/e1_004ae792188b_origin_01.png"
+    ],
+    "class2": [],
+    "manufacturer": [
+      "assets/generated/enter1/e1_004ae792188b_manufacturer_01.png"
+    ],
+    "weee": [
+      "assets/generated/enter1/e1_004ae792188b_weee_01.png"
+    ],
+    "manual": [
+      "assets/generated/enter1/e1_004ae792188b_manual_01.png"
+    ],
+    "ip": "IPX4",
+    "protect": [],
+    "other": []
+  },
+  {
+    "id": "e1_25d8be6dbd4a",
+    "country": {
+      "zh": "乌克兰",
+      "en": "",
+      "de": ""
+    },
+    "category": {
+      "zh": "电动工具",
+      "en": "",
+      "de": ""
+    },
+    "product": {
+      "zh": "台锯",
+      "en": "",
+      "de": ""
+    },
+    "powerType": "Corded",
+    "example": [
+      "assets/generated/enter1/e1_25d8be6dbd4a_example_01.png"
+    ],
+    "model": "GTS 635-216",
+    "bareModel": "3601M42001",
+    "specs": "220-240V 50-60Hz 1600W n=5500 min-1",
+    "dateCode": "MM/YYYY",
+    "cert": [
+      "assets/generated/enter1/e1_25d8be6dbd4a_cert_01.png"
+    ],
+    "eco": [],
+    "origin": [
+      "assets/generated/enter1/e1_25d8be6dbd4a_origin_01.png"
+    ],
+    "class2": [
+      "assets/generated/enter1/e1_25d8be6dbd4a_class2_01.png"
+    ],
+    "manufacturer": [
+      "assets/generated/enter1/e1_25d8be6dbd4a_manufacturer_01.png"
+    ],
+    "weee": [
+      "assets/generated/enter1/e1_25d8be6dbd4a_weee_01.png"
+    ],
+    "manual": [
+      "assets/generated/enter1/e1_25d8be6dbd4a_manual_01.png"
+    ],
+    "ip": "",
+    "protect": [
+      "assets/generated/enter1/e1_25d8be6dbd4a_protect_01.png"
+    ],
+    "other": [
+      "assets/generated/enter1/e1_25d8be6dbd4a_other_01.png"
+    ]
+  }
+]

@@ -1,0 +1,24 @@
+.build/
+temp_sync/
+__pycache__/
+scripts/__pycache__/
+*.py[cod]
+excel/~$*.xlsx
+config.local.json
+config.json
+logs/
+.DS_Store
+.venv/
+.pages-host-test/
+
+# Local source workbooks and legacy development material are not release content.
+*.xlsx
+*.zip
+.claude/
+CLAUDE.md
+附件/
+img_new_hd/
+process_new_images.py
+sharpen_v2.py
+开发指导文档.md
+设计要求.txt

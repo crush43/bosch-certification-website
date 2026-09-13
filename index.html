@@ -1,0 +1,688 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>BOSCH Certification Mark Information Management</title>
+<link rel="icon" type="image/png" href="./logo.png" />
+<style>
+:root{
+  --bosch-blue:#005691; --bosch-blue-dark:#003D6B; --bosch-blue-light:#E8F1F8;
+  --bosch-blue-hover:#0070B8; --bosch-red:#E20015; --bosch-black:#1A1A1A;
+  --g900:#1F2937; --g700:#4B5563; --g500:#6B7280; --g300:#D1D5DB; --g100:#F3F4F6;
+  --bg:#FFFFFF; --card:#FFFFFF; --line:#E5E7EB; --line-soft:#F0F1F3;
+  --shadow-sm:0 1px 2px rgba(15,23,42,.05); --shadow-md:0 1px 2px rgba(15,23,42,.05);
+  --shadow-lift:0 10px 30px rgba(15,23,42,.10);
+  --shadow-lg:0 10px 30px rgba(15,23,42,.10);
+  --radius-sm:6px; --radius-md:10px; --radius-lg:12px; --tr:.18s ease;
+  /* Bosch supergraphic — 分段品牌色 (red / fuchsia / blue / light blue / green) */
+  --sg-red:#E20015; --sg-fuchsia:#C2005A; --sg-blue:#005691; --sg-lblue:#009FE3; --sg-green:#78BE20;
+  --supergraphic:linear-gradient(90deg,#E20015 0% 17%,#C2005A 17% 33%,#005691 33% 56%,#009FE3 56% 78%,#78BE20 78% 100%);
+  --supergraphic-v:linear-gradient(180deg,#E20015 0% 17%,#C2005A 17% 33%,#005691 33% 56%,#009FE3 56% 78%,#78BE20 78% 100%);
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{font-size:14px;scroll-behavior:smooth}
+body{font-family:'Helvetica Neue',Helvetica,Arial,-apple-system,BlinkMacSystemFont,'Segoe UI','PingFang SC','Microsoft YaHei',sans-serif;color:var(--bosch-black);background:var(--bg);line-height:1.6;min-height:100vh;-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale;text-rendering:optimizeLegibility}
+img{max-width:100%}
+a{color:inherit;text-decoration:none}
+
+/* ===== Header ===== */
+.topbar{background:var(--supergraphic);height:5px;width:100%;position:fixed;top:0;left:0;z-index:100}
+.header{background:var(--card);border-bottom:1px solid var(--g300);padding:0 28px;height:62px;display:flex;align-items:center;justify-content:space-between;position:fixed;top:5px;left:0;right:0;z-index:99;box-shadow:var(--shadow-sm)}
+.header-left{display:flex;align-items:center;gap:18px}
+.bosch-logo{display:flex;align-items:center;gap:10px;cursor:pointer}
+.bosch-logo-img{height:34px;width:auto;display:block}
+.header-title{font-size:14px;font-weight:600;color:var(--g700);border-left:1px solid var(--g300);padding-left:18px}
+.header-nav{display:flex;gap:2px;align-items:center}
+.nav-link{padding:8px 14px;font-size:13px;font-weight:600;color:var(--g500);border-radius:var(--radius-sm);cursor:pointer;transition:all var(--tr);white-space:nowrap}
+.nav-link:hover{background:var(--bosch-blue-light);color:var(--bosch-blue)}
+.nav-link.active{background:var(--bosch-blue);color:#fff}
+.lang-switcher{position:relative;margin-left:6px}
+.lang-btn{display:flex;align-items:center;gap:6px;background:var(--card);border:1px solid var(--g300);border-radius:20px;padding:5px 12px;cursor:pointer;font-size:12px;font-weight:600;color:var(--g700);font-family:inherit}
+.lang-btn:hover{border-color:var(--bosch-blue)}
+.lang-dropdown{display:none;position:absolute;top:calc(100% + 6px);right:0;background:var(--card);border:1px solid var(--g300);border-radius:var(--radius-md);box-shadow:var(--shadow-lg);min-width:150px;z-index:200;overflow:hidden}
+.lang-switcher.open .lang-dropdown{display:block}
+.lang-option{display:flex;align-items:center;gap:8px;padding:9px 14px;cursor:pointer;font-size:13px;color:var(--g700);transition:all var(--tr)}
+.lang-option:hover{background:var(--bosch-blue-light);color:var(--bosch-blue)}
+.lang-option.active{background:var(--bosch-blue);color:#fff;font-weight:600}
+
+/* ===== Views ===== */
+.view{display:none}
+.view.active{display:block}
+.page-wrap{margin-top:66px;min-height:calc(100vh - 66px)}
+
+/* ===== Home ===== */
+.home-hero{background:#fff;color:var(--bosch-black);padding:50px 32px 42px;position:relative;overflow:hidden;border-bottom:1px solid var(--line)}
+.home-hero::before{content:'';position:absolute;top:0;left:0;width:6px;height:100%;background:var(--supergraphic-v);z-index:2}
+.home-hero::after{display:none}
+.home-hero-inner{max-width:1120px;margin:0 auto;padding-left:22px;position:relative;z-index:1}
+.home-eyebrow{font-size:12px;font-weight:700;letter-spacing:2.5px;text-transform:uppercase;color:#9fd0ee;margin-bottom:16px}
+.home-eyebrow::before{content:'';display:inline-block;width:7px;height:7px;background:var(--bosch-red);border-radius:50%;margin-right:9px;vertical-align:middle}
+.home-hero h1{font-size:34px;font-weight:700;letter-spacing:-.3px;margin-bottom:12px;line-height:1.2;color:var(--bosch-black)}
+.home-hero p{font-size:16px;color:var(--g700);max-width:640px;line-height:1.7}
+.home-cards{max-width:1120px;margin:0 auto;padding:48px 32px 56px;display:grid;grid-template-columns:repeat(3,1fr);gap:22px;position:relative;z-index:2}
+.enter-card{background:var(--card);border-radius:var(--radius-lg);box-shadow:none;overflow:hidden;cursor:pointer;transition:transform var(--tr),box-shadow var(--tr),border-color var(--tr);border:1px solid var(--line);display:flex;flex-direction:column}
+.enter-card:hover{transform:translateY(-3px);box-shadow:var(--shadow-lift);border-color:#CBD2DA}
+.enter-card-banner{height:8px}
+.enter-card-body{padding:22px 24px 22px;flex:1;display:flex;flex-direction:column}
+.enter-card h3{font-size:19px;font-weight:700;color:var(--bosch-black);margin-bottom:8px}
+.enter-card .sub{font-size:12px;font-weight:600;color:var(--g500);letter-spacing:.5px;margin-bottom:12px;text-transform:uppercase}
+.enter-card .desc{font-size:13.5px;color:var(--g700);line-height:1.7;flex:1}
+.enter-card-foot{margin-top:18px;display:flex;align-items:center;gap:6px;font-size:13px;font-weight:700;color:var(--bosch-blue)}
+.home-note-banner{max-width:1120px;margin:0 auto 50px;padding:0 32px}
+.note-callout{background:#FBF7EC;border:1px solid #ECE2C2;border-radius:var(--radius-md);padding:13px 18px;font-size:13.5px;color:#6B5416;display:flex;align-items:center;gap:10px}
+.home-foot{max-width:1120px;margin:0 auto;padding:24px 32px 48px;text-align:center;color:var(--g500);font-size:12.5px;border-top:1px solid var(--line)}
+.last-updated{margin-top:6px;color:var(--g500);font-size:12px}
+.app-status{position:fixed;z-index:45;inset:64px 0 0;background:rgba(245,246,246,.94);display:flex;align-items:center;justify-content:center;padding:24px}
+.app-status.hidden{display:none}
+.app-status-card{max-width:560px;padding:22px 28px;background:#fff;border-top:4px solid var(--bosch-blue);box-shadow:0 8px 28px rgba(0,0,0,.14);text-align:center;font-weight:600}
+.app-status.error .app-status-card{border-top-color:var(--bosch-red)}
+
+/* ===== Section common ===== */
+.section-head{max-width:1280px;margin:0 auto;padding:24px 32px 0}
+.section-head h2{font-size:22px;font-weight:700;letter-spacing:-.2px;color:var(--bosch-black);display:flex;align-items:center;gap:11px}
+.section-head h2::before{content:'';width:18px;height:4px;background:var(--supergraphic);border-radius:2px;flex-shrink:0}
+.section-head .crumb{font-size:12px;color:var(--g500);margin-top:6px;font-weight:600}
+.section-head .crumb b{color:var(--bosch-blue)}
+.section-desc{font-size:13.5px;color:var(--g700);margin-top:8px;max-width:820px}
+.switch-pill{display:flex;align-items:center;gap:8px;padding:9px 16px;border-radius:30px;border:1.5px solid var(--line);background:var(--card);font-size:13px;font-weight:600;color:var(--g700);cursor:pointer;transition:all var(--tr);font-family:inherit}
+.switch-pill:hover{border-color:var(--bosch-blue);color:var(--bosch-blue);transform:translateY(-2px)}
+.switch-pill .ic{font-size:16px}
+
+/* ===== ENTER1 layout ===== */
+.e1-layout{display:flex;max-width:1280px;margin:24px auto 0;padding:0 32px;gap:20px}
+.e1-sidebar{width:260px;flex-shrink:0;background:var(--card);border:1px solid var(--line);border-radius:var(--radius-lg);padding:20px 18px;position:sticky;top:84px;align-self:flex-start;box-shadow:var(--shadow-sm)}
+.side-label{font-size:11px;font-weight:700;color:var(--g500);text-transform:uppercase;letter-spacing:1.2px;margin:14px 0 8px;display:flex;align-items:center;gap:6px}
+.side-label:first-child{margin-top:0}
+.side-label::before{content:'';width:3px;height:12px;background:var(--bosch-blue);border-radius:2px}
+.sel{width:100%;padding:9px 12px;border:1.5px solid var(--g300);border-radius:var(--radius-sm);font-size:13px;font-family:inherit;color:var(--bosch-black);background:var(--card);cursor:pointer;appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath d='M1 1l4 4 4-4' stroke='%23888' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 12px center}
+.sel:focus{outline:none;border-color:var(--bosch-blue);box-shadow:0 0 0 3px rgba(0,86,145,.12)}
+.radio-row{display:flex;gap:8px}
+.rb{flex:1}
+.rb input{display:none}
+.rb label{display:block;text-align:center;padding:9px 8px;border:1.5px solid var(--g300);border-radius:var(--radius-sm);font-size:12px;font-weight:600;color:var(--g700);cursor:pointer;transition:all var(--tr)}
+.rb input:checked+label{background:var(--bosch-blue);color:#fff;border-color:var(--bosch-blue)}
+.e1-content{flex:1;min-width:0}
+.filter-summary{background:var(--bosch-blue-light);border:1px solid rgba(0,86,145,.15);border-radius:var(--radius-md);padding:11px 16px;margin-bottom:18px;font-size:13px;color:var(--bosch-blue)}
+.filter-summary strong{color:var(--bosch-blue-dark)}
+
+/* nameplate card */
+.np-card{background:var(--card);border-radius:var(--radius-lg);box-shadow:none;overflow:hidden;border:1px solid var(--line);margin-bottom:24px}
+.np-card-top{background:linear-gradient(135deg,var(--bosch-blue-dark),var(--bosch-blue));padding:18px 24px;display:flex;align-items:center;justify-content:space-between}
+.np-top-left{display:flex;align-items:center;gap:13px}
+.np-top-ic{width:42px;height:42px;background:rgba(255,255,255,.15);border-radius:var(--radius-md);display:flex;align-items:center;justify-content:center;font-size:20px}
+.np-top-text h3{color:#fff;font-size:17px;font-weight:700}
+.np-top-text span{color:rgba(255,255,255,.7);font-size:12px}
+.np-top-badge{background:rgba(255,255,255,.2);color:#fff;padding:6px 13px;border-radius:20px;font-size:12px;font-weight:600}
+.np-section-label{font-size:12px;font-weight:700;color:var(--g500);text-transform:uppercase;letter-spacing:1px;margin:22px 24px 12px;display:flex;align-items:center;gap:8px}
+.np-section-label::before{content:'';width:3px;height:14px;background:var(--bosch-red);border-radius:2px}
+.np-section-label.blue::before{background:var(--bosch-blue)}
+.np-full-wrap{margin:0 24px;background:#fff;border:1.5px solid var(--bosch-black);border-radius:var(--radius-sm);overflow:hidden;cursor:zoom-in;position:relative}
+.np-full-wrap img{display:block;width:100%;height:auto;image-rendering:-webkit-optimize-contrast;image-rendering:crisp-edges}
+.np-full-empty{margin:0 24px;background:var(--g100);border:2px dashed var(--g300);border-radius:var(--radius-sm);height:160px;display:flex;align-items:center;justify-content:center;color:var(--g500);font-size:13px;font-style:italic}
+.np-zoom-hint{position:absolute;top:8px;right:8px;background:rgba(0,86,145,.9);color:#fff;font-size:10px;font-weight:700;padding:3px 10px;border-radius:10px}
+.np-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:14px;padding:0 24px 24px}
+.dblock{background:var(--g100);border-radius:var(--radius-md);overflow:hidden;border:1px solid transparent;transition:all var(--tr)}
+.dblock:hover{border-color:var(--bosch-blue);box-shadow:var(--shadow-sm)}
+.dblock-head{display:flex;align-items:center;gap:9px;padding:11px 14px;background:var(--card);border-bottom:1px solid var(--g100)}
+.dnum{width:24px;height:24px;border-radius:50%;background:var(--bosch-blue);color:#fff;font-size:12px;font-weight:800;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.dname{font-size:13px;font-weight:700;color:var(--bosch-black)}
+.dbody{padding:14px}
+.dimg-box{background:#fff;border-radius:var(--radius-sm);min-height:64px;max-height:96px;margin-bottom:9px;overflow:hidden;display:flex;align-items:center;justify-content:center;padding:6px}
+.dimg-box img{max-width:100%;max-height:84px;object-fit:contain;image-rendering:-webkit-optimize-contrast;image-rendering:crisp-edges}
+.dimg-empty{color:var(--g300);font-size:11px;font-style:italic}
+.dval{font-size:14px;font-weight:700;color:var(--bosch-black);word-break:break-all}
+.dval.muted{color:var(--g500);font-weight:400;font-style:italic}
+.tag-row{display:flex;flex-wrap:wrap;gap:5px}
+
+/* ===== ENTER2 ===== */
+.e2-wrap{max-width:1280px;margin:0 auto;padding:0 32px}
+.filter-panel{background:var(--card);border-radius:var(--radius-lg);border:1px solid var(--line);padding:18px 20px;margin-bottom:16px;display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:14px;align-items:end;box-shadow:var(--shadow-sm)}
+.fg label{display:block;font-size:11px;font-weight:700;color:var(--g500);letter-spacing:.06em;text-transform:uppercase;margin-bottom:6px}
+.fg .sel,.fg input{width:100%;padding:9px 12px;border:1.5px solid var(--line);border-radius:var(--radius-sm);font-size:13px;background:#fff;color:var(--bosch-black);outline:none;font-family:inherit}
+.results-bar{display:flex;align-items:center;gap:10px;margin-bottom:14px;flex-wrap:wrap}
+.results-bar h3{font-size:15px;font-weight:700}
+.count-pill{background:var(--bosch-black);color:#fff;font-size:11px;font-weight:700;padding:3px 10px;border-radius:20px}
+.cert-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(330px,1fr));gap:14px}
+.cert-card{background:var(--card);border-radius:var(--radius-lg);border:1px solid var(--line);overflow:hidden;transition:border-color var(--tr),box-shadow var(--tr)}
+.cert-card:hover{border-color:#CBD2DA;box-shadow:var(--shadow-lift)}
+.cert-card.open{border-color:var(--bosch-blue);box-shadow:0 0 0 3px rgba(0,86,145,.1)}
+.cert-head{padding:16px 18px;display:flex;align-items:flex-start;gap:14px;cursor:pointer;user-select:none}
+.cert-icon{width:66px;height:66px;flex-shrink:0;border-radius:var(--radius-sm);border:1.5px solid var(--line-soft);background:#fff;display:flex;align-items:center;justify-content:center;overflow:hidden;padding:5px}
+.cert-icon img{max-width:100%;max-height:100%;object-fit:contain}
+.cert-meta{flex:1;min-width:0}
+.cert-name{font-size:15px;font-weight:800;color:var(--bosch-black);line-height:1.3;margin-bottom:3px}
+.cert-region{font-size:12.5px;color:var(--g500);margin-bottom:7px}
+.cert-draw{display:inline-block;font-size:11px;font-family:'Courier New',monospace;background:var(--g100);color:var(--g700);padding:2px 8px;border-radius:5px;border:1px solid var(--line)}
+.chev{font-size:20px;color:var(--g300);flex-shrink:0;transition:transform var(--tr);line-height:1}
+.cert-card.open .chev{color:var(--bosch-blue);transform:rotate(90deg)}
+.cert-body{display:none;border-top:1px solid var(--line-soft)}
+.cert-card.open .cert-body{display:block}
+.cert-body-pad{padding:15px 18px 18px}
+.cert-sk{font-size:11px;font-weight:700;color:var(--g500);text-transform:uppercase;letter-spacing:.05em;margin-bottom:6px}
+.cert-notes{font-size:13px;color:var(--g700);line-height:1.75;background:var(--g100);border-radius:var(--radius-sm);padding:12px 14px}
+.cert-notes .nl{display:block;padding:3px 0}
+.cert-prod-wrap{margin-top:14px}
+.cert-prod-tags{display:flex;flex-wrap:wrap;gap:5px}
+.cert-prod-tag{font-size:11px;padding:3px 9px;border-radius:6px;background:var(--bg);color:var(--g700);border:1px solid var(--line);font-weight:500}
+.empty-state{text-align:center;padding:54px;color:var(--g500);font-size:14px;background:var(--card);border-radius:var(--radius-lg);border:1.5px dashed var(--line);grid-column:1/-1;line-height:1.9}
+
+/* ===== ENTER3 ===== */
+.e3-wrap{max-width:980px;margin:0 auto;padding:0 32px}
+.link-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:18px;margin-top:24px}
+.link-card{background:var(--card);border-radius:var(--radius-lg);border:1px solid var(--line);padding:24px;box-shadow:none;transition:transform var(--tr),box-shadow var(--tr),border-color var(--tr);display:flex;flex-direction:column}
+.link-card:hover{transform:translateY(-3px);box-shadow:var(--shadow-lift);border-color:#CBD2DA}
+.link-ic{width:44px;height:44px;border-radius:var(--radius-sm);background:var(--bosch-blue-light);display:flex;align-items:center;justify-content:center;font-size:22px;margin-bottom:14px}
+.link-card h4{font-size:18px;font-weight:800;color:var(--bosch-black);margin-bottom:8px}
+.link-card .ldesc{font-size:13.5px;color:var(--g700);line-height:1.7;flex:1;margin-bottom:16px}
+.link-btn{display:inline-flex;align-items:center;gap:7px;background:var(--bosch-red);color:#fff;padding:9px 16px;border-radius:var(--radius-sm);font-size:13px;font-weight:700;align-self:flex-start;transition:background var(--tr)}
+.link-btn:hover{background:#bb0012}
+
+/* ===== Lightbox ===== */
+.lightbox{display:none;position:fixed;inset:0;background:rgba(0,0,0,.88);z-index:1000;align-items:center;justify-content:center;cursor:zoom-out}
+.lightbox.active{display:flex}
+.lightbox img{max-width:95vw;max-height:92vh;object-fit:contain;border-radius:4px;box-shadow:0 8px 40px rgba(0,0,0,.5);image-rendering:-webkit-optimize-contrast;image-rendering:crisp-edges}
+.lightbox-close{position:absolute;top:20px;right:28px;color:#fff;font-size:32px;cursor:pointer;width:40px;height:40px;display:flex;align-items:center;justify-content:center;background:rgba(255,255,255,.1);border-radius:50%}
+.lightbox-close:hover{background:rgba(255,255,255,.25)}
+
+.footer-note{background:#FBF7EC;border-top:1px solid #ECE2C2;color:#6B5416;text-align:center;padding:16px;font-size:13.5px;font-weight:600}
+
+@media(max-width:900px){
+  .home-cards{grid-template-columns:1fr}
+  .e1-sidebar{display:none}
+  .home-hero h1{font-size:28px}
+  .header-title{display:none}
+  .nav-link{padding:8px 10px;font-size:12px}
+}
+</style>
+</head>
+<body>
+<div class="topbar"></div>
+<div class="header">
+  <div class="header-left">
+    <div class="bosch-logo" onclick="go('home')">
+      <img src="logo.png" alt="BOSCH" class="bosch-logo-img" />
+    </div>
+    <div class="header-title" data-i18n="headerTitle"></div>
+  </div>
+  <div class="header-nav">
+    <div class="nav-link" data-nav="home" onclick="go('home')">🏠 <span data-i18n="navHome"></span></div>
+    <div class="nav-link" data-nav="enter1" onclick="go('enter1')"><span data-i18n="navE1"></span></div>
+    <div class="nav-link" data-nav="enter2" onclick="go('enter2')"><span data-i18n="navE2"></span></div>
+    <div class="nav-link" data-nav="enter3" onclick="go('enter3')"><span data-i18n="navE3"></span></div>
+    <div class="lang-switcher" id="langSwitcher">
+      <div class="lang-btn" onclick="toggleLang()">🌐 <span id="curLang">中</span> ▾</div>
+      <div class="lang-dropdown">
+        <div class="lang-option active" data-lang="zh" onclick="setLang('zh')">🇨🇳 中文</div>
+        <div class="lang-option" data-lang="en" onclick="setLang('en')">🇬🇧 English</div>
+        <div class="lang-option" data-lang="de" onclick="setLang('de')">🇩🇪 Deutsch</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="app-status" id="appStatus" role="status" aria-live="polite">
+  <div class="app-status-card" id="appStatusText">数据加载中...</div>
+</div>
+
+<div class="page-wrap">
+  <!-- ============ HOME ============ -->
+  <div class="view active" id="view-home">
+    <div class="home-hero">
+      <div class="home-hero-inner">
+        <h1 data-i18n="heroTitle"></h1>
+        <p data-i18n="heroDesc"></p>
+      </div>
+    </div>
+    <div class="home-cards">
+      <div class="enter-card" onclick="go('enter1')">
+        <div class="enter-card-banner" style="background:linear-gradient(90deg,var(--sg-red),var(--sg-fuchsia))"></div>
+        <div class="enter-card-body">
+          <div class="sub" data-i18n="sub1"></div>
+          <h3 data-i18n="c1t"></h3>
+          <div class="desc" data-i18n="c1d"></div>
+          <div class="enter-card-foot" data-i18n="foot1"></div>
+        </div>
+      </div>
+      <div class="enter-card" onclick="go('enter2')">
+        <div class="enter-card-banner" style="background:linear-gradient(90deg,var(--sg-blue),var(--sg-lblue))"></div>
+        <div class="enter-card-body">
+          <div class="sub" data-i18n="sub2"></div>
+          <h3 data-i18n="c2t"></h3>
+          <div class="desc" data-i18n="c2d"></div>
+          <div class="enter-card-foot" data-i18n="foot2"></div>
+        </div>
+      </div>
+      <div class="enter-card" onclick="go('enter3')">
+        <div class="enter-card-banner" style="background:linear-gradient(90deg,var(--sg-lblue),var(--sg-green))"></div>
+        <div class="enter-card-body">
+          <div class="sub" data-i18n="sub3"></div>
+          <h3 data-i18n="c3t"></h3>
+          <div class="desc" data-i18n="c3d"></div>
+          <div class="enter-card-foot" data-i18n="foot3"></div>
+        </div>
+      </div>
+    </div>
+    <div class="home-note-banner">
+      <div class="note-callout">ℹ️ <span data-i18n="note"></span></div>
+    </div>
+    <div class="home-foot"><div data-i18n="homeFoot"></div><div class="last-updated" id="lastUpdated" hidden></div></div>
+  </div>
+
+  <!-- ============ ENTER1 ============ -->
+  <div class="view" id="view-enter1">
+    <div class="section-head">
+      <h2><span data-i18n="e1t"></span></h2>
+      <div class="crumb"><span data-i18n="crumbHome"></span> / <b data-i18n="navE1"></b></div>
+      <div class="section-desc" data-i18n="e1d"></div>
+    </div>
+    <div class="e1-layout">
+      <div class="e1-sidebar">
+        <div class="side-label" data-i18n="sCountry"></div>
+        <select class="sel" id="countrySel" onchange="onE1Filter()"></select>
+        <div class="side-label" data-i18n="sCategory"></div>
+        <select class="sel" id="categorySel" onchange="onE1Filter()"></select>
+        <div class="side-label" data-i18n="sProduct"></div>
+        <select class="sel" id="productSel" onchange="onE1Filter()"></select>
+        <div class="side-label" data-i18n="sPower"></div>
+        <div class="radio-row" id="powerRow">
+          <div class="rb"><input type="radio" name="pw" id="pwAll" value="" checked onchange="onE1Filter()"><label for="pwAll" data-i18n="all"></label></div>
+          <div class="rb"><input type="radio" name="pw" id="pwCorded" value="Corded" onchange="onE1Filter()"><label for="pwCorded" data-i18n="corded"></label></div>
+          <div class="rb"><input type="radio" name="pw" id="pwCordless" value="Cordless" onchange="onE1Filter()"><label for="pwCordless" data-i18n="cordless"></label></div>
+        </div>
+      </div>
+      <div class="e1-content" id="e1Content">
+        <div class="filter-summary" id="e1Summary"></div>
+        <div id="e1Cards"></div>
+      </div>
+    </div>
+    <div class="footer-note" data-i18n="note"></div>
+  </div>
+
+  <!-- ============ ENTER2 ============ -->
+  <div class="view" id="view-enter2">
+    <div class="section-head">
+      <h2><span data-i18n="e2t"></span></h2>
+      <div class="crumb"><span data-i18n="crumbHome"></span> / <b data-i18n="navE2"></b></div>
+      <div class="section-desc" data-i18n="e2d"></div>
+    </div>
+    <div class="e2-wrap">
+      <div class="filter-panel">
+        <div class="fg">
+          <label data-i18n="searchLabel"></label>
+          <input type="text" id="certSearch" data-i18n-ph="searchPh" oninput="renderE2()">
+        </div>
+        <div class="fg">
+          <label data-i18n="filterCountry"></label>
+          <select class="sel" id="certCountrySel" onchange="renderE2()"></select>
+        </div>
+        <div class="fg">
+          <label data-i18n="filterProduct"></label>
+          <select class="sel" id="certProdSel" onchange="renderE2()"></select>
+        </div>
+      </div>
+      <div class="results-bar">
+        <h3 data-i18n="resTitle"></h3>
+        <span class="count-pill" id="certCount">0</span>
+        <button class="switch-pill" onclick="certExpandAll(true)" style="margin-left:auto" data-i18n="expandAll"></button>
+        <button class="switch-pill" onclick="certExpandAll(false)" data-i18n="collapseAll"></button>
+      </div>
+      <div class="cert-grid" id="certGrid"></div>
+    </div>
+    <div class="footer-note" data-i18n="note"></div>
+  </div>
+
+  <!-- ============ ENTER3 ============ -->
+  <div class="view" id="view-enter3">
+    <div class="section-head">
+      <h2><span data-i18n="e3t"></span></h2>
+      <div class="crumb"><span data-i18n="crumbHome"></span> / <b data-i18n="navE3"></b></div>
+      <div class="section-desc" data-i18n="e3d"></div>
+    </div>
+    <div class="e3-wrap">
+      <div class="link-grid" id="linkGrid"></div>
+    </div>
+    <div class="footer-note" data-i18n="note"></div>
+  </div>
+</div>
+
+<div class="lightbox" id="lightbox" onclick="closeLightbox()">
+  <div class="lightbox-close">&times;</div>
+  <img id="lightboxImg" src="" alt="" />
+</div>
+
+<script>
+// ============ i18n (zh / en / de) ============
+let LANG='zh';
+const I={
+zh:{
+  headerTitle:'认证标志信息管理系统',
+  navHome:'首页',navE1:'基础信息',navE2:'认证标志',navE3:'参考链接',
+  eyebrow:'Nameplate · Certification · Reference',
+  heroTitle:'认证标志信息管理系统',
+  heroDesc:'面向博世电动工具、测量工具与家用电器等产品，包含基础信息查询、认证标志说明、参考链接三部分，选择下方入口开始查询。',
+  sub1:'Basic Information',sub2:'Certification Mark',sub3:'Reference Link',
+  c1t:'基础信息查询',c1d:'按国家、产品类别、产品名称筛选，查看完整铭牌示例及各区域详解：型号、参数、认证标志、原产地、制造商信息等。',
+  c2t:'认证标志说明',c2d:'全球各地区强制与自愿认证标志（CE、CCC、UL、ETL、CSA、China RoHS 等），含尺寸、格式、图纸编号与适用产品范围。',
+  c3t:'参考链接',c3d:'PT/ECS 协作空间、最新认证新闻、欧盟符合性声明（EUDoC）及各国信息等内部参考资源快速入口。',
+  foot1:'进入查询 →',foot2:'查看标志 →',foot3:'查看链接 →',
+  homeFoot:'© BOSCH · 认证标志信息管理系统 · 数据来源：信息条目 1/2/3',
+  note:'本系统供内部参考使用。如有疑问，请咨询认证工程师。',
+  crumbHome:'首页',
+  e1t:'基础信息查询',e1d:'选择国家、产品类别与产品名称，查看对应铭牌完整示例及各区域字段详解。',
+  e2t:'认证标志说明',e2d:'各国强制与自愿认证标志，含标志示意图、图纸编号、关键尺寸格式要求及适用产品范围。点击卡片展开详情。',
+  e3t:'参考链接',e3d:'内部认证协作与资源参考入口。点击卡片按钮跳转对应系统（需内网访问权限）。',
+  sCountry:'国家 / 地区',sCategory:'产品类别',sProduct:'产品名称',sPower:'供电方式',
+  all:'全部',corded:'有线',cordless:'无线',
+  fModel:'型号信息',fSpecs:'技术参数',fDate:'生产年月',fCert:'认证标志',fEco:'环保标志',fOrigin:'原产地信息',fClass2:'Class II 标志',fMfr:'制造商 / 生产者信息',fWEEE:'WEEE 标志',fManual:'阅读说明书',fIP:'IP 等级',fProtect:'防护标志',fOther:'其他特殊标签',
+  model:'型号',bare:'裸机号',clickZoom:'点击放大',noImg:'暂无图片',na:'—',please:'请从左侧选择筛选条件',
+  foundRec:'共找到',recUnit:'条记录',resCountry:'国家',resCategory:'类别',resProduct:'产品',resPower:'电源',noMatch:'未找到匹配记录，请调整筛选条件',
+  fullLabel:'完整铭牌（示例）',detailLabel:'铭牌各区域详解',
+  resTitle:'认证标志',noRes:'未找到匹配的认证标志',
+  searchLabel:'关键词搜索',searchPh:'如 CE、CCC、UL、尺寸…',filterCountry:'国家 / 地区',filterProduct:'适用产品',
+  expandAll:'全部展开',collapseAll:'全部折叠',keyReq:'关键备注',appProd:'适用产品',
+  lkPT:'PT / ECS 协作空间',lkPTd:'电动工具与消费品技术工程协作平台，含标准、项目与文档资源。',
+  lkNews:'认证新闻 News',lkNewsd:'Bosch PT/ECS 最新认证动态、法规变更与公告信息。',
+  lkEUDoC:'欧盟符合性声明 EUDoC',lkEUDoCd:'各国认证信息与欧盟符合性声明文档入口。',
+  openLink:'打开链接',
+  selCountry:'全部国家',selCat:'全部类别',selProd:'全部产品',selRegion:'全部区域',selProdAll:'全部产品',
+  valOriginCN:'中国杭州制造',
+  loading:'数据加载中...',loadError:'数据加载失败，请刷新页面或联系认证工程师。',lastUpdated:'最后更新',referenceResource:'参考资源'
+},
+en:{
+  headerTitle:'Certification Mark Information Management System',
+  navHome:'Home',navE1:'Basic Info',navE2:'Certification',navE3:'Reference',
+  eyebrow:'Nameplate · Certification · Reference',
+  heroTitle:'Certification Mark Information Management System',
+  heroDesc:'For Bosch power tools, measuring tools and home appliances — three parts: basic information lookup, certification mark descriptions, and reference links. Select an entry below to start.',
+  sub1:'Basic Information',sub2:'Certification Mark',sub3:'Reference Link',
+  c1t:'Basic Information',c1d:'Filter by country, category and product to view the full nameplate example and per-region field details.',
+  c2t:'Certification Marks',c2d:'Mandatory and voluntary certification marks worldwide (CE, CCC, UL, ETL, CSA, China RoHS) with size, format, drawing no. and product scope.',
+  c3t:'Reference Links',c3d:'Quick access to PT/ECS workspace, certification news, EUDoC and country information resources.',
+  foot1:'Enter →',foot2:'View marks →',foot3:'View links →',
+  homeFoot:'© BOSCH · Certification Mark Information Management System · Source: Items 1/2/3',
+  note:'For internal reference. If in doubt, consult the certification engineer.',
+  crumbHome:'Home',
+  e1t:'Basic Information',e1d:'Select country, category and product to view the nameplate example and field details.',
+  e2t:'Certification Marks',e2d:'Mandatory and voluntary certification marks with icon, drawing no., key size/format requirements and applicable products. Click a card to expand.',
+  e3t:'Reference Links',e3d:'Internal certification collaboration and reference entries. Click a card button to open the system (intranet access required).',
+  sCountry:'Country / Region',sCategory:'Product Category',sProduct:'Product Name',sPower:'Power Type',
+  all:'All',corded:'Corded',cordless:'Cordless',
+  fModel:'Model Info',fSpecs:'Specifications',fDate:'Date Code',fCert:'Certification',fEco:'Eco Mark',fOrigin:'Origin Info',fClass2:'Class II Mark',fMfr:'Manufacturer',fWEEE:'WEEE Mark',fManual:'Read Manual',fIP:'IP Rating',fProtect:'Protection Mark',fOther:'Other Label',
+  model:'Model',bare:'Bare model',clickZoom:'Click to zoom',noImg:'No image',na:'—',please:'Select filters from the left',
+  foundRec:'Found',recUnit:'records',resCountry:'Country',resCategory:'Category',resProduct:'Product',resPower:'Power',noMatch:'No matching records — adjust your filters',
+  fullLabel:'Full nameplate (example)',detailLabel:'Field details',
+  resTitle:'Certification Marks',noRes:'No matching certification marks found',
+  searchLabel:'Search',searchPh:'e.g. CE, CCC, UL, size…',filterCountry:'Country / Region',filterProduct:'Applicable product',
+  expandAll:'Expand all',collapseAll:'Collapse all',keyReq:'Key requirements',appProd:'Applicable products',
+  lkPT:'PT / ECS Workspace',lkPTd:'Power Tools engineering collaboration platform with standards, projects and documents.',
+  lkNews:'Certification News',lkNewsd:'Latest Bosch PT/ECS certification updates and regulatory changes.',
+  lkEUDoC:'EU Declaration of Conformity',lkEUDoCd:'Country certification info and EU Declaration of Conformity documents.',
+  openLink:'Open link',
+  selCountry:'All countries',selCat:'All categories',selProd:'All products',selRegion:'All regions',selProdAll:'All products',
+  valOriginCN:'Made in Hangzhou, China',
+  loading:'Loading data...',loadError:'Failed to load data. Please refresh the page or contact the certification engineer.',lastUpdated:'Last Updated',referenceResource:'Reference resource'
+},
+de:{
+  headerTitle:'Informationssystem für Zulassungszeichen',
+  navHome:'Start',navE1:'Basisinfo',navE2:'Zulassung',navE3:'Referenz',
+  eyebrow:'Typschild · Zulassung · Referenz',
+  heroTitle:'Informationssystem für Zulassungszeichen',
+  heroDesc:'Für Bosch-Elektrowerkzeuge, Messwerkzeuge und Hausgeräte — drei Bereiche: Basisinformationen, Zulassungszeichen und Referenzlinks. Wählen Sie unten einen Einstieg.',
+  sub1:'Basisinformation',sub2:'Zulassungszeichen',sub3:'Referenzlink',
+  c1t:'Basisinformation',c1d:'Filter nach Land, Kategorie und Produkt, um das vollständige Typschildbeispiel und die feldbezogenen Details anzuzeigen.',
+  c2t:'Zulassungszeichen',c2d:'Obligatorische und freiwillige Zulassungszeichen weltweit (CE, CCC, UL, ETL, CSA, China RoHS) mit Größe, Format, Zeichnungsnummer und Produktumfang.',
+  c3t:'Referenzlinks',c3d:'Schnellzugriff auf PT/ECS-Arbeitsbereich, Zulassungs-News, EU-Konformitätserklärung und Länderinformationen.',
+  foot1:'Öffnen →',foot2:'Zeichen ansehen →',foot3:'Links ansehen →',
+  homeFoot:'© BOSCH · Informationssystem für Zulassungszeichen · Quelle: Positionen 1/2/3',
+  note:'Nur für interne Referenz. Bei Fragen wenden Sie sich an den Zulassungsingenieur.',
+  crumbHome:'Start',
+  e1t:'Basisinformation',e1d:'Land, Kategorie und Produkt wählen, um Typschildbeispiel und Felddetails anzuzeigen.',
+  e2t:'Zulassungszeichen',e2d:'Obligatorische und freiwillige Zulassungszeichen mit Symbol, Zeichnungsnummer, wesentlichen Maß-/Formatanforderungen und anwendbaren Produkten. Karte zum Ausklappen anklicken.',
+  e3t:'Referenzlinks',e3d:'Interne Zulassungskooperation und Referenzeinträge. Kartenschaltfläche zum Öffnen des Systems (Intranetzugriff erforderlich).',
+  sCountry:'Land / Region',sCategory:'Produktkategorie',sProduct:'Produktname',sPower:'Stromversorgung',
+  all:'Alle',corded:'Kabel',cordless:'Akku',
+  fModel:'Modellinfo',fSpecs:'Techn. Daten',fDate:'Datumscode',fCert:'Zulassung',fEco:'Umweltzeichen',fOrigin:'Herkunft',fClass2:'Klasse-II-Zeichen',fMfr:'Hersteller',fWEEE:'WEEE-Zeichen',fManual:'Handbuch lesen',fIP:'IP-Schutzart',fProtect:'Schutzzeichen',fOther:'Sonstiges Zeichen',
+  model:'Modell',bare:'Basismodell',clickZoom:'Klick zum Vergrößern',noImg:'Kein Bild',na:'—',please:'Filter links auswählen',
+  foundRec:'Gefunden',recUnit:'Einträge',resCountry:'Land',resCategory:'Kategorie',resProduct:'Produkt',resPower:'Strom',noMatch:'Keine passenden Einträge — Filter anpassen',
+  fullLabel:'Vollständiges Typschild (Beispiel)',detailLabel:'Felddetails',
+  resTitle:'Zulassungszeichen',noRes:'Keine übereinstimmenden Zulassungszeichen gefunden',
+  searchLabel:'Suche',searchPh:'z. B. CE, CCC, UL, Größe…',filterCountry:'Land / Region',filterProduct:'Anwendbares Produkt',
+  expandAll:'Alle ausklappen',collapseAll:'Alle einklappen',keyReq:'Wesentliche Anforderungen',appProd:'Anwendbare Produkte',
+  lkPT:'PT / ECS-Arbeitsbereich',lkPTd:'Kooperationsplattform für Elektrowerkzeug-Engineering mit Normen, Projekten und Dokumenten.',
+  lkNews:'Zulassungs-News',lkNewsd:'Aktuelle Bosch PT/ECS-Zulassungs-Updates und regulatorische Änderungen.',
+  lkEUDoC:'EU-Konformitätserklärung',lkEUDoCd:'Länderzulassungsinformationen und EU-Konformitätserklärungsdokumente.',
+  openLink:'Link öffnen',
+  selCountry:'Alle Länder',selCat:'Alle Kategorien',selProd:'Alle Produkte',selRegion:'Alle Regionen',selProdAll:'Alle Produkte',
+  valOriginCN:'Hergestellt in Hangzhou, China',
+  loading:'Daten werden geladen...',loadError:'Daten konnten nicht geladen werden. Bitte aktualisieren Sie die Seite oder wenden Sie sich an den Zertifizierungsingenieur.',lastUpdated:'Letzte Aktualisierung',referenceResource:'Referenzressource'
+}
+};
+function t(k){return (I[LANG]&&I[LANG][k])||I.zh[k]||k;}
+
+// ============ DATA (loaded from generated JSON) ============
+let D1=[];
+let D2=[];
+let D3=[];
+let META=null;
+let APP_READY=false;
+let APP_LOAD_FAILED=false;
+
+function L(obj){
+  if(obj===null||obj===undefined)return '';
+  if(typeof obj==='string'||typeof obj==='number')return String(obj);
+  return obj[LANG]||obj.zh||obj.en||obj.de||'';
+}
+function esc(value){return String(value??'').replace(/[&<>"']/g,ch=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[ch]));}
+function jsq(value){return String(value??'').replace(/\\/g,'\\\\').replace(/'/g,"\\'").replace(/\r?\n/g,'\\n');}
+
+// ============ Navigation ============
+function go(v){
+  if(!APP_READY&&v!=='home')return;
+  document.querySelectorAll('.view').forEach(x=>x.classList.remove('active'));
+  document.getElementById('view-'+v).classList.add('active');
+  document.querySelectorAll('.nav-link').forEach(n=>n.classList.toggle('active',n.dataset.nav===v));
+  window.scrollTo(0,0);
+  if(v==='enter1') renderE1();
+  if(v==='enter2') renderE2();
+  if(v==='enter3') renderE3();
+}
+function openLightbox(src){document.getElementById('lightboxImg').src=src;document.getElementById('lightbox').classList.add('active');}
+function closeLightbox(){document.getElementById('lightbox').classList.remove('active');}
+document.addEventListener('keydown',e=>{if(e.key==='Escape')closeLightbox();});
+
+// ============ Lang ============
+function toggleLang(){document.getElementById('langSwitcher').classList.toggle('open');}
+function setLang(l){LANG=l;document.getElementById('curLang').textContent=l==='zh'?'中':l.toUpperCase();document.querySelectorAll('.lang-option').forEach(o=>o.classList.toggle('active',o.dataset.lang===l));document.getElementById('langSwitcher').classList.remove('open');applyLang();}
+document.addEventListener('click',e=>{const s=document.getElementById('langSwitcher');if(!s.contains(e.target))s.classList.remove('open');});
+function applyLang(){
+  const z=I[LANG];
+  document.querySelectorAll('[data-i18n]').forEach(el=>{el.textContent=z[el.dataset.i18n]||I.zh[el.dataset.i18n]||el.dataset.i18n;});
+  document.querySelectorAll('[data-i18n-ph]').forEach(el=>{el.placeholder=z[el.dataset.i18nPh]||I.zh[el.dataset.i18nPh]||'';});
+  updateAppStatus();
+  updateLastUpdated();
+  const active=document.querySelector('.view.active');
+  if(!active||active.id==='view-home')return;
+  if(active.id==='view-enter1')renderE1();
+  if(active.id==='view-enter2')renderE2();
+  if(active.id==='view-enter3')renderE3();
+}
+
+// ============ ENTER1 ============
+function uniq(arr,k){return [...new Set(arr.map(x=>L(x[k])).filter(Boolean))];}
+// 填充下拉：只放入 opts，若当前已选值仍在新选项中则保留，否则清空 —— 这是级联的关键
+function fillSel(sel,opts,ph){const v=sel.value;sel.innerHTML='<option value="">'+ph+'</option>'+opts.map(o=>'<option value="'+o+'">'+o+'</option>').join('');sel.value=opts.includes(v)?v:'';}
+// 级联筛选：选国家→类别只列该国存在的；选类别→产品只列该国该类存在的。避免出现"选了却查无数据"的组合，用户不必空试
+function initE1Filters(){
+  const cSel=document.getElementById('countrySel'),caSel=document.getElementById('categorySel'),pSel=document.getElementById('productSel');
+  fillSel(cSel, uniq(D1,'country'), t('selCountry'));                                             // 国家：始终全量
+  const afterC = cSel.value ? D1.filter(i=>L(i.country)===cSel.value) : D1;
+  fillSel(caSel, uniq(afterC,'category'), t('selCat'));                                           // 类别：仅"已选国家"下的
+  const ca=caSel.value;
+  const afterCA = D1.filter(i=>(!cSel.value||L(i.country)===cSel.value)&&(!ca||L(i.category)===ca));
+  fillSel(pSel, uniq(afterCA,'product'), t('selProd'));                                           // 产品：仅"已选国家+类别"下的
+}
+function onE1Filter(){renderE1();}
+function getE1Filtered(){
+  const c=document.getElementById('countrySel').value,ca=document.getElementById('categorySel').value,p=document.getElementById('productSel').value,pw=document.querySelector('input[name=pw]:checked').value;
+  return D1.filter(i=>(!c||L(i.country)===c)&&(!ca||L(i.category)===ca)&&(!p||L(i.product)===p)&&(!pw||i.powerType===pw));
+}
+function imgBox(src,alt){
+  if(Array.isArray(src)){
+    if(!src.length)return '<div class="dimg-box"><span class="dimg-empty">'+t('noImg')+'</span></div>';
+    return '<div class="tag-row" style="margin-bottom:9px">'+src.map(s=>'<div class="dimg-box" style="flex:1;min-width:80px;cursor:zoom-in" onclick="event.stopPropagation();openLightbox(\''+jsq(s)+'\')"><img src="'+esc(s)+'" alt="'+esc(alt)+'"/></div>').join('')+'</div>';
+  }
+  if(src)return '<div class="dimg-box" onclick="openLightbox(\''+jsq(src)+'\')" style="cursor:zoom-in"><img src="'+esc(src)+'" alt="'+esc(alt)+'"/></div>';
+  return '<div class="dimg-box"><span class="dimg-empty">'+t('noImg')+'</span></div>';
+}
+function fieldBlock(num,name,body){return '<div class="dblock"><div class="dblock-head"><span class="dnum">'+num+'</span><span class="dname">'+name+'</span></div><div class="dbody">'+body+'</div></div>';}
+function renderE1(){
+  initE1Filters();
+  const items=getE1Filtered();
+  const sum=document.getElementById('e1Summary');
+  if(!items.length){sum.innerHTML='<strong>'+t('noMatch')+'</strong>';document.getElementById('e1Cards').innerHTML='';return;}
+  const c=document.getElementById('countrySel').value,ca=document.getElementById('categorySel').value,p=document.getElementById('productSel').value,pw=document.querySelector('input[name=pw]:checked').value;
+  sum.innerHTML=t('foundRec')+' <strong>'+items.length+'</strong> '+t('recUnit')+(c?' · '+t('resCountry')+': <strong>'+c+'</strong>':'')+(ca?' · '+t('resCategory')+': <strong>'+ca+'</strong>':'')+(p?' · '+t('resProduct')+': <strong>'+p+'</strong>':'')+(pw?' · '+t('resPower')+': <strong>'+pw+'</strong>':'');
+  document.getElementById('e1Cards').innerHTML=items.map(it=>{
+    const example=Array.isArray(it.example)?it.example[0]:it.example;
+    return '<div class="np-card">'
+      +'<div class="np-card-top"><div class="np-top-left"><div class="np-top-ic">🏷️</div><div class="np-top-text"><h3>'+esc(L(it.product))+'</h3><span>'+esc(L(it.category))+' · '+esc(L(it.country))+' · '+esc(it.powerType||'')+'</span></div></div><span class="np-top-badge">'+esc(it.model||'')+'</span></div>'
+      +'<div class="np-section-label">'+t('fullLabel')+'</div>'
+      +(example?'<div class="np-full-wrap" onclick="openLightbox(\''+jsq(example)+'\')"><img src="'+esc(example)+'" alt=""/><span class="np-zoom-hint">'+t('clickZoom')+'</span></div>':'<div class="np-full-empty">'+t('noImg')+'</div>')
+      +'<div class="np-section-label blue">'+t('detailLabel')+'</div>'
+      +'<div class="np-grid">'
+      +fieldBlock(1,t('fModel'),imgBox(it.example,t('fModel'))+'<div class="dval">'+t('model')+'：'+(it.model||t('na'))+'</div><div class="dval muted" style="font-size:12px;margin-top:4px">'+t('bare')+'：'+(it.bareModel||t('na'))+'</div>')
+      +fieldBlock(2,t('fSpecs'),'<div class="dval">'+(it.specs||t('na'))+'</div>')
+      +fieldBlock(3,t('fDate'),'<div class="dval">'+(it.dateCode||t('na'))+'</div>')
+      +fieldBlock(4,t('fCert'),imgBox(it.cert,t('fCert')))
+      +fieldBlock(5,t('fEco'),imgBox(it.eco,t('fEco')))
+      +fieldBlock(6,t('fOrigin'),imgBox(it.origin,t('fOrigin')))
+      +fieldBlock(7,t('fClass2'),imgBox(it.class2,t('fClass2')))
+      +fieldBlock(8,t('fMfr'),imgBox(it.manufacturer,t('fMfr')))
+      +fieldBlock(9,t('fWEEE'),imgBox(it.weee,t('fWEEE')))
+      +fieldBlock(10,t('fManual'),imgBox(it.manual,t('fManual')))
+      +fieldBlock(11,t('fIP'),'<div class="dval">'+(it.ip||t('na'))+'</div>')
+      +fieldBlock(12,t('fProtect'),imgBox(it.protect,t('fProtect')))
+      +fieldBlock(13,t('fOther'),imgBox(it.other,t('fOther')))
+      +'</div></div>';
+  }).join('');
+}
+
+// ============ ENTER2 ============
+let _certOpen={};
+function initE2Filters(){
+  const cs=uniq(D2,'country');
+  const prods=new Set();
+  D2.forEach(m=>L(m.products).split(/[，,、]/).forEach(p=>{p=p.trim();if(p)prods.add(p);}));
+  const cSel=document.getElementById('certCountrySel'),pSel=document.getElementById('certProdSel');
+  const cv=cSel.value,pv=pSel.value;
+  cSel.innerHTML=['<option value="">'+t('selRegion')+'</option>',...cs.map(x=>'<option value="'+x+'">'+x+'</option>')].join('');
+  pSel.innerHTML=['<option value="">'+t('selProdAll')+'</option>',...[...prods].map(x=>'<option value="'+x+'">'+x+'</option>')].join('');
+  cSel.value=cv;pSel.value=pv;
+}
+function renderE2(){
+  initE2Filters();
+  const c=document.getElementById('certCountrySel').value,p=document.getElementById('certProdSel').value,q=(document.getElementById('certSearch').value||'').trim().toLowerCase();
+  let f=D2.filter(m=>{
+    if(c&&L(m.country)!==c)return false;
+    if(p&&!L(m.products).includes(p))return false;
+    if(q){const blob=([m.name,L(m.nameCn),L(m.country),m.drawing,L(m.notes),L(m.products)].filter(Boolean).join(' ')).toLowerCase();if(!blob.includes(q))return false;}
+    return true;
+  });
+  document.getElementById('certCount').textContent=f.length;
+  const grid=document.getElementById('certGrid');
+  if(!f.length){grid.innerHTML='<div class="empty-state">'+t('noRes')+'</div>';return;}
+  grid.innerHTML=f.map(m=>{
+    const key=m.drawing||m.id;
+    const domId='cc-'+String(m.id||key).replace(/[^A-Za-z0-9_-]/g,'_');
+    const open=_certOpen[key]?'open':'';
+    const image=Array.isArray(m.image)?m.image[0]:m.image;
+    const notes=L(m.notes).split('\n').map(n=>n.trim()).filter(Boolean).map(n=>'<span class="nl">'+esc(n)+'</span>').join('');
+    const prods=L(m.products).split(/[，,、]/).map(x=>x.trim()).filter(Boolean).map(x=>'<span class="cert-prod-tag">'+esc(x)+'</span>').join('');
+    return '<div class="cert-card '+open+'" id="'+domId+'">'
+      +'<div class="cert-head" onclick="certToggle(\''+jsq(key)+'\',\''+jsq(domId)+'\')">'
+      +'<div class="cert-icon">'+(image?'<img src="'+esc(image)+'" alt="'+esc(m.name||'')+'"/>':'<span class="dimg-empty">'+t('noImg')+'</span>')+'</div>'
+      +'<div class="cert-meta"><div class="cert-name">'+esc(m.name||'')+'</div>'
+      +'<div class="cert-region">'+esc(L(m.country))+'</div>'
+      +'<span class="cert-draw">'+esc(m.drawing||t('na'))+'</span></div>'
+      +'<div class="chev">›</div></div>'
+      +'<div class="cert-body"><div class="cert-body-pad">'
+      +'<div class="cert-sk">'+t('keyReq')+'</div>'
+      +'<div class="cert-notes">'+notes+'</div>'
+      +'<div class="cert-prod-wrap"><div class="cert-sk">'+t('appProd')+'</div><div class="cert-prod-tags">'+prods+'</div></div>'
+      +'</div></div></div>';
+  }).join('');
+}
+function certToggle(key,domId){_certOpen[key]=!_certOpen[key];const card=document.getElementById(domId);if(card)card.classList.toggle('open');}
+function certExpandAll(on){D2.forEach(m=>{_certOpen[m.drawing||m.id]=on;});renderE2();}
+
+// ============ ENTER3 ============
+function renderE3(){
+  const known={PT:{icon:'🛠️',desc:'lkPTd'},News:{icon:'📰',desc:'lkNewsd'},EUDoC:{icon:'📄',desc:'lkEUDoCd'}};
+  document.getElementById('linkGrid').innerHTML=D3.map(l=>{
+    const preset=known[l.key];
+    const title=l.title||(preset?t('lk'+l.key):l.key||t('referenceResource'));
+    const desc=preset?t(preset.desc):t('referenceResource');
+    return '<div class="link-card"><div class="link-ic">'+(preset?preset.icon:'🔗')+'</div><h4>'+esc(title)+'</h4><div class="ldesc">'+esc(desc)+'</div><a class="link-btn" href="'+esc(l.url||'#')+'" target="_blank" rel="noopener noreferrer">↗ '+t('openLink')+'</a></div>';
+  }).join('');
+}
+
+// ============ async initialization ============
+function updateAppStatus(){
+  const box=document.getElementById('appStatus'),text=document.getElementById('appStatusText');
+  if(!box||!text)return;
+  if(APP_READY){box.className='app-status hidden';return;}
+  box.className='app-status'+(APP_LOAD_FAILED?' error':'');
+  text.textContent=t(APP_LOAD_FAILED?'loadError':'loading');
+}
+function updateLastUpdated(){
+  const el=document.getElementById('lastUpdated');
+  if(!el)return;
+  if(!META||!META.generatedAt){el.hidden=true;el.textContent='';return;}
+  const date=new Date(META.generatedAt);
+  const locale={zh:'zh-CN',en:'en-GB',de:'de-DE'}[LANG]||'zh-CN';
+  const value=Number.isNaN(date.getTime())?META.generatedAt:date.toLocaleString(locale);
+  el.textContent=t('lastUpdated')+'：'+value;
+  el.hidden=false;
+}
+async function fetchJson(path){
+  const response=await fetch(path,{cache:'no-store'});
+  if(!response.ok)throw new Error(path+' returned HTTP '+response.status);
+  return response.json();
+}
+async function loadAppData(){
+  APP_READY=false;
+  APP_LOAD_FAILED=false;
+  updateAppStatus();
+  const metaRequest=fetchJson('./data/meta.json').catch(err=>{
+    console.warn('Non-critical meta.json load failed:',err);
+    return null;
+  });
+  try{
+    const [basic,marks,links,meta]=await Promise.all([
+      fetchJson('./data/basic_information.json'),
+      fetchJson('./data/certification_marks.json'),
+      fetchJson('./data/reference_links.json'),
+      metaRequest
+    ]);
+    if(!Array.isArray(basic)||!Array.isArray(marks)||!Array.isArray(links)){
+      throw new Error('Core JSON root values must be arrays');
+    }
+    D1=basic;
+    D2=marks;
+    D3=links;
+    META=meta;
+    APP_READY=true;
+    applyLang();
+    go('home');
+  }catch(err){
+    APP_LOAD_FAILED=true;
+    console.error('Failed to initialize certification website data:',err);
+    applyLang();
+  }
+}
+
+loadAppData();
+</script>
+</body>
+</html>

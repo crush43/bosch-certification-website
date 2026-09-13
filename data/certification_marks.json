@@ -1,0 +1,163 @@
+[
+  {
+    "id": "e2_161111b021",
+    "country": {
+      "zh": "欧盟",
+      "en": "",
+      "de": ""
+    },
+    "name": "CE",
+    "drawing": "161111B021",
+    "image": [
+      "assets/generated/enter2/e2_161111b021_01.png"
+    ],
+    "notes": {
+      "zh": "1.尺寸: 高度≥5mm\n2.格式: 如果CE标志缩小或放大，必须遵守图示比例\n3.位置1: CE标志的各个组成部分必须具有相同的垂直尺寸\n4.位置2: CE标志必须贴在制造商名称附近",
+      "en": "",
+      "de": ""
+    },
+    "products": {
+      "zh": "手持式工具，移动式工具，草坪和园林机械，家用电器，测量工具",
+      "en": "",
+      "de": ""
+    }
+  },
+  {
+    "id": "e2_161111b002",
+    "country": {
+      "zh": "中国",
+      "en": "",
+      "de": ""
+    },
+    "name": "CCC",
+    "drawing": "161111B002",
+    "image": [
+      "assets/generated/enter2/e2_161111b002_01.png"
+    ],
+    "notes": {
+      "zh": "1.尺寸: 从 (500+50) mm的距离用正常视力观察时，标记必须清晰可辨\n2.格式: 必须使用可以在GIS中下载的模板",
+      "en": "",
+      "de": ""
+    },
+    "products": {
+      "zh": "有线电钻、有线冲击钻、有线角磨机、有线抛光机、有线旋转锤、有线凿岩锤",
+      "en": "",
+      "de": ""
+    }
+  },
+  {
+    "id": "e2_161111b015",
+    "country": {
+      "zh": "中国",
+      "en": "",
+      "de": ""
+    },
+    "name": "China RoHS II for compliance",
+    "drawing": "161111B015",
+    "image": [
+      "assets/generated/enter2/e2_161111b015_01.png"
+    ],
+    "notes": {
+      "zh": "1.尺寸: ≥5mm × 5mm\n2.色码: C 85，M 30，Y 85，K 20\n绿色并非严格必需。首选绿色，但也可使用其他醒目颜色。(例如，黑白激光打印)。",
+      "en": "",
+      "de": ""
+    },
+    "products": {
+      "zh": "危险材料不超过危险限值的电动工具",
+      "en": "",
+      "de": ""
+    }
+  },
+  {
+    "id": "e2_161111b02f",
+    "country": {
+      "zh": "中国",
+      "en": "",
+      "de": ""
+    },
+    "name": "China RoHS II for noncompliance",
+    "drawing": "161111B02F",
+    "image": [
+      "assets/generated/enter2/e2_161111b02f_01.png"
+    ],
+    "notes": {
+      "zh": "1.尺寸: ≥5mm × 5mm\n2. 色码：C 0，M 75，Y 100，K 0\n橙色并非严格必需。首选绿色，但也可使用其他醒目颜色。(例如，黑白激光打印)。",
+      "en": "",
+      "de": ""
+    },
+    "products": {
+      "zh": "危险材料不超过危险限值的电动工具",
+      "en": "",
+      "de": ""
+    }
+  },
+  {
+    "id": "e2_161111b006",
+    "country": {
+      "zh": "美国/加拿大",
+      "en": "",
+      "de": ""
+    },
+    "name": "UL",
+    "drawing": "161111B006",
+    "image": [
+      "assets/generated/enter2/e2_161111b006_01.png"
+    ],
+    "notes": {
+      "zh": "1.当UL标志的整体直径＜9.5mm时，商标符号®可以省略。(最小高度: 商标®1.2毫米）\n2.字母字体: Helvetica Condensed Medium\n3.XXXXXX指文件编号，例如: E 1234 (可选，不需要)",
+      "en": "",
+      "de": ""
+    },
+    "products": {
+      "zh": "手持式工具，移动式工具，草坪和园林机械，家用电器，测量工具",
+      "en": "",
+      "de": ""
+    }
+  },
+  {
+    "id": "e2_161111b014",
+    "country": {
+      "zh": "美国/加拿大",
+      "en": "",
+      "de": ""
+    },
+    "name": "ETL",
+    "drawing": "161111B014",
+    "image": [
+      "assets/generated/enter2/e2_161111b014_01.png"
+    ],
+    "notes": {
+      "zh": "1.只有当来自Intertek ETL的ATM可用时，才可使用此标记\n2.尺寸：≥13mm，≥25mm (1 inch) 宽，清晰易读",
+      "en": "",
+      "de": ""
+    },
+    "products": {
+      "zh": "手持式工具，移动式工具，草坪和园林机械，家用电器，测量工具",
+      "en": "",
+      "de": ""
+    }
+  },
+  {
+    "id": "e2_161111b016",
+    "country": {
+      "zh": "美国/加拿大",
+      "en": "",
+      "de": ""
+    },
+    "name": "CSA",
+    "drawing": "161111B016",
+    "image": [
+      "assets/generated/enter2/e2_161111b016_01.png"
+    ],
+    "notes": {
+      "zh": "对于PT产品，“C” (标志中的弧形) 的首选高度为3.2mm~5mm",
+      "en": "",
+      "de": ""
+    },
+    "products": {
+      "zh": "手持式工具，移动式工具，草坪和园林机械，家用电器，测量工具",
+      "en": "",
+      "de": ""
+    }
+  }
+]
