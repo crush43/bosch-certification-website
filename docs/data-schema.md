@@ -223,6 +223,24 @@
 
 同步日志不得包含账号、令牌或其他敏感信息。
 
+### STEP 6 生产配置
+
+```json
+{
+  "excelSource": "S:/CertificationWebsite/Data",
+  "productionMode": true,
+  "archiveSnapshots": true,
+  "archiveDirectory": "S:/CertificationWebsite/Archive"
+}
+```
+
+- 生产模式拒绝使用仓库内的 `./excel` 测试源。
+- 每次运行只解析 `.build/` 中经过校验的本地 snapshot。
+- 本机日志记录源路径、大小、修改时间、snapshot 时间和 SHA-256。
+- 网站公开数据 `data/meta.json` 刻意不包含源目录路径。
+- 开启归档后，三份已验证工作簿和 `snapshot-manifest.json` 保存到带时间戳的归档目录。
+- 对应的 `~$` 锁文件、snapshot 期间的大小或修改时间变化都会在替换正式数据前终止同步。
+
 ## 后续模块与数据源扩展原则
 
 - ENTER1 当前只实现“铭牌信息”Sheet。未来包装、说明书、警告标签等模块应各自拥有明确的 Sheet、Schema、验证规则和 JSON 输出；在业务表结构确认前不预造数据，也不把模块逻辑硬编码进页面。

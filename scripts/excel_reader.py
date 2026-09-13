@@ -51,7 +51,7 @@ def file_modified_at(path: Path) -> str:
     return datetime.fromtimestamp(path.stat().st_mtime).astimezone().isoformat(timespec="seconds")
 
 
-def snapshot_excel(source: Path, destination: Path) -> dict[str, str]:
+def snapshot_excel(source: Path, destination: Path) -> dict[str, Any]:
     """Copy one source workbook and prove it did not change during the copy."""
     before = source.stat()
     shutil.copy2(source, destination)
@@ -67,7 +67,10 @@ def snapshot_excel(source: Path, destination: Path) -> dict[str, str]:
         raise RuntimeError(f"Snapshot checksum mismatch: {source.name}")
     return {
         "file": source.name,
+        "sourcePath": str(source.resolve()),
+        "size": final.st_size,
         "modifiedAt": file_modified_at(source),
+        "snapshotAt": datetime.now().astimezone().isoformat(timespec="seconds"),
         "sha256": source_hash,
     }
 

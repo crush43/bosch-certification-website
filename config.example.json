@@ -1,3 +1,6 @@
 {
-  "excelSource": "./excel"
+  "excelSource": "./excel",
+  "productionMode": false,
+  "archiveSnapshots": false,
+  "archiveDirectory": ""
 }

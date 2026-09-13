@@ -20,12 +20,12 @@ set "SYNC_EXIT=9009"
 goto finish
 
 :run_with_py
-py -3 scripts\sync_excel.py
+py -3 scripts\sync_excel.py %*
 set "SYNC_EXIT=%ERRORLEVEL%"
 goto result
 
 :run_with_python
-python scripts\sync_excel.py
+python scripts\sync_excel.py %*
 set "SYNC_EXIT=%ERRORLEVEL%"
 
 :result

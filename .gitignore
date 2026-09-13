@@ -10,10 +10,20 @@ logs/
 .DS_Store
 .venv/
 .pages-host-test/
+Archive/
+archive/
+Publish/
+publish/
+bosch_shared_test/
 
 # Local source workbooks and legacy development material are not release content.
 *.xlsx
 *.zip
+*.token
+*.pem
+*.pfx
+.env
+.env.*
 .claude/
 CLAUDE.md
 附件/

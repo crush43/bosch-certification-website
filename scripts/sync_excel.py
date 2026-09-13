@@ -64,11 +64,8 @@ E2_HEADERS = ["国家", "标志", "图纸编号", "标志示意图", "关键备�
 E2_IMAGE_HEADERS = {"标志示意图": "image"}
 
 
-def resolve_excel_dir(project_root: Path, cli_excel_dir: Path | None) -> tuple[Path, str]:
-    """Resolve the one Excel source directory from CLI or project configuration."""
-    if cli_excel_dir is not None:
-        return cli_excel_dir.expanduser().resolve(), "--excel-dir"
-
+def load_local_config(project_root: Path) -> tuple[dict[str, Any], str | None]:
+    """Load local-only runtime settings without requiring a configuration file."""
     local_config = project_root / "config.local.json"
     legacy_config = project_root / "config.json"
     if local_config.is_file():
@@ -76,18 +73,61 @@ def resolve_excel_dir(project_root: Path, cli_excel_dir: Path | None) -> tuple[P
     elif legacy_config.is_file():
         config_path = legacy_config
     else:
-        return (project_root / "excel").resolve(), "default ./excel"
+        return {}, None
     try:
         config = json.loads(config_path.read_text(encoding="utf-8-sig"))
     except (OSError, json.JSONDecodeError) as exc:
         raise RuntimeError(f"Cannot read Excel source configuration {config_path.name}: {exc}") from exc
-    value = config.get("excelSource") if isinstance(config, dict) else None
-    if not isinstance(value, str) or not value.strip():
-        raise RuntimeError(f'{config_path.name} must contain a non-empty string field "excelSource"')
-    configured = Path(value.strip()).expanduser()
-    if not configured.is_absolute():
-        configured = project_root / configured
-    return configured.resolve(), config_path.name
+    if not isinstance(config, dict):
+        raise RuntimeError(f"{config_path.name} must contain a JSON object")
+    return config, config_path.name
+
+
+def config_bool(config: dict[str, Any], key: str, default: bool, config_name: str | None) -> bool:
+    value = config.get(key, default)
+    if not isinstance(value, bool):
+        raise RuntimeError(f'{config_name or "configuration"} field "{key}" must be true or false')
+    return value
+
+
+def resolve_sync_settings(
+    project_root: Path, cli_excel_dir: Path | None, cli_production: bool
+) -> tuple[Path, str, bool, bool, Path | None]:
+    """Resolve source, production mode and optional archive location."""
+    config, config_name = load_local_config(project_root)
+    if cli_excel_dir is not None:
+        excel_dir = cli_excel_dir.expanduser().resolve()
+        source_name = "--excel-dir"
+    else:
+        value = config.get("excelSource", "./excel")
+        if not isinstance(value, str) or not value.strip():
+            raise RuntimeError(f'{config_name or "configuration"} must contain a non-empty string field "excelSource"')
+        configured = Path(value.strip()).expanduser()
+        if not configured.is_absolute():
+            configured = project_root / configured
+        excel_dir = configured.resolve()
+        source_name = config_name or "default ./excel"
+
+    production_mode = cli_production or config_bool(config, "productionMode", False, config_name)
+    archive_enabled = config_bool(config, "archiveSnapshots", False, config_name)
+    archive_value = config.get("archiveDirectory", "")
+    if not isinstance(archive_value, str):
+        raise RuntimeError(f'{config_name or "configuration"} field "archiveDirectory" must be a string')
+    archive_dir: Path | None = None
+    if archive_enabled:
+        if archive_value.strip():
+            archive_dir = Path(archive_value.strip()).expanduser()
+            if not archive_dir.is_absolute():
+                archive_dir = project_root / archive_dir
+            archive_dir = archive_dir.resolve()
+        else:
+            archive_dir = (excel_dir.parent / "Archive").resolve()
+
+    if production_mode and excel_dir == (project_root / "excel").resolve():
+        raise RuntimeError(
+            "Production mode cannot publish from ./excel. Configure config.local.json to use the approved shared Excel source."
+        )
+    return excel_dir, source_name, production_mode, archive_enabled, archive_dir
 
 
 def now_iso() -> str:
@@ -323,6 +363,34 @@ def check_lock_files(excel_dir: Path) -> None:
         raise RuntimeError("Excel lock file detected; close and save the workbook before syncing: " + ", ".join(existing))
 
 
+def archive_snapshot(snapshot_dir: Path, archive_dir: Path, source_files: dict[str, Any]) -> dict[str, str]:
+    """Archive one verified three-workbook snapshot using an atomic directory rename."""
+    archive_dir.mkdir(parents=True, exist_ok=True)
+    snapshot_id = datetime.now().strftime("%Y-%m-%d_%H%M%S-%f")
+    final_dir = archive_dir / snapshot_id
+    staging_dir = archive_dir / f".{snapshot_id}.tmp-{uuid.uuid4().hex}"
+    if final_dir.exists():
+        raise RuntimeError(f"Archive destination already exists: {final_dir}")
+    try:
+        staging_dir.mkdir(parents=False, exist_ok=False)
+        for file_name in (E1_FILE, E2_FILE, E3_FILE):
+            shutil.copy2(snapshot_dir / file_name, staging_dir / file_name)
+        write_json(
+            staging_dir / "snapshot-manifest.json",
+            {
+                "snapshotId": snapshot_id,
+                "archivedAt": now_iso(),
+                "sourceFiles": source_files,
+            },
+        )
+        os.replace(staging_dir, final_dir)
+    except Exception:
+        if staging_dir.exists():
+            shutil.rmtree(staging_dir, ignore_errors=True)
+        raise
+    return {"snapshotId": snapshot_id, "directory": str(final_dir)}
+
+
 def assert_publish_targets(project_root: Path) -> None:
     expected_data = (project_root / "data").resolve()
     expected_generated = (project_root / "assets" / "generated").resolve()
@@ -386,7 +454,14 @@ def write_report(logs_dir: Path, report: dict) -> None:
     os.replace(latest_tmp, logs_dir / "sync-report.json")
 
 
-def run_sync(project_root: Path, excel_dir: Path, source_config: str = "--excel-dir") -> int:
+def run_sync(
+    project_root: Path,
+    excel_dir: Path,
+    source_config: str = "--excel-dir",
+    production_mode: bool = False,
+    archive_enabled: bool = False,
+    archive_dir: Path | None = None,
+) -> int:
     started_at = now_iso()
     issues = Issues()
     run_root = project_root / ".build" / f"sync-{uuid.uuid4().hex}"
@@ -396,8 +471,11 @@ def run_sync(project_root: Path, excel_dir: Path, source_config: str = "--excel-
         "startedAt": started_at,
         "completedAt": None,
         "status": "failed",
+        "mode": "production" if production_mode else "development",
         "sourceConfig": source_config,
+        "sourceDirectory": str(excel_dir),
         "snapshotCreated": False,
+        "archive": {"enabled": archive_enabled, "status": "pending" if archive_enabled else "disabled"},
         "sourceFiles": {},
         "records": {"enter1": 0, "enter2": 0, "enter3": 0},
         "images": {
@@ -439,6 +517,15 @@ def run_sync(project_root: Path, excel_dir: Path, source_config: str = "--excel-
         if issues.errors:
             raise RuntimeError(f"Validation failed with {len(issues.errors)} error(s)")
 
+        if archive_enabled:
+            if archive_dir is None:
+                raise RuntimeError("Snapshot archiving is enabled but no archive directory was resolved")
+            report["archive"] = {
+                "enabled": True,
+                "status": "success",
+                **archive_snapshot(snapshot_dir, archive_dir, report["sourceFiles"]),
+            }
+
         data_dir = run_root / "data"
         write_json(data_dir / "basic_information.json", basic)
         write_json(data_dir / "certification_marks.json", certs)
@@ -446,11 +533,16 @@ def run_sync(project_root: Path, excel_dir: Path, source_config: str = "--excel-
         generated_at = now_iso()
         source_meta = {}
         for key, info in report["sourceFiles"].items():
-            source_meta[key] = {**info, "records": report["records"][{
+            source_meta[key] = {
+                field: info[field]
+                for field in ("file", "size", "modifiedAt", "snapshotAt", "sha256")
+                if field in info
+            }
+            source_meta[key]["records"] = report["records"][{
                 "basicInformation": "enter1",
                 "certificationMarks": "enter2",
                 "referenceLinks": "enter3",
-            }[key]]}
+            }[key]]
         meta = {
             "generatedAt": generated_at,
             "status": "success",
@@ -486,7 +578,10 @@ def run_sync(project_root: Path, excel_dir: Path, source_config: str = "--excel-
         print("Bosch Certification Website Sync")
         print("=" * 43)
         print(f"Excel source: {source_config}")
+        print(f"Mode: {'PRODUCTION' if production_mode else 'DEVELOPMENT'}")
         print("Source snapshot: CREATED AND VERIFIED")
+        if archive_enabled:
+            print(f"Snapshot archive: {report['archive']['snapshotId']}")
         print("ENTER1")
         print(f"  Records: {len(basic)}")
         print(f"  Image objects: {e1_images['objects']}")
@@ -546,6 +641,11 @@ def parse_args() -> argparse.Namespace:
         default=None,
         help="Override the configured directory containing the three source workbooks",
     )
+    parser.add_argument(
+        "--production",
+        action="store_true",
+        help="Require an external approved Excel source and mark the run as production",
+    )
     return parser.parse_args()
 
 
@@ -557,8 +657,23 @@ if __name__ == "__main__":
     args = parse_args()
     root = Path(__file__).resolve().parents[1]
     try:
-        excel_source, source_config_name = resolve_excel_dir(root, args.excel_dir)
+        (
+            excel_source,
+            source_config_name,
+            production_mode,
+            archive_enabled,
+            archive_dir,
+        ) = resolve_sync_settings(root, args.excel_dir, args.production)
     except Exception as exc:
         print(f"Configuration error: {exc}", file=sys.stderr)
         raise SystemExit(2)
-    raise SystemExit(run_sync(root, excel_source, source_config_name))
+    raise SystemExit(
+        run_sync(
+            root,
+            excel_source,
+            source_config_name,
+            production_mode,
+            archive_enabled,
+            archive_dir,
+        )
+    )

@@ -1,14 +1,32 @@
 # 博世认证网站维护说明
 
-这是一个静态认证信息网站。认证工程师维护 Excel，脚本将 Excel 转换为网站使用的 JSON 和图片，然后由 GitHub Pages 发布静态文件。
+这是一个静态认证信息网站。认证工程师维护 Excel，脚本将 Excel 转换为网站使用的 JSON 和图片，再发布到经过 Bosch IT / 信息安全批准的静态托管平台。GitHub Pages 目前只是可选测试方案，不是默认生产结论。
 
 ```text
-Excel → 数据同步与校验 → JSON/图片 → 本地预览 → Git提交 → GitHub Pages
+Excel → 数据同步与校验 → JSON/图片 → 本地预览 → Git提交 → 获批的静态托管平台
 ```
+
+## 多人维护模式
+
+正式环境只允许一套共享 Excel 作为唯一数据源。不要让多名员工各自保存一套“正式 Excel”再分别同步。
+
+```text
+业务维护人员共同编辑共享 Excel
+→ 发布人员在指定同步电脑运行 snapshot、校验和预览
+→ 发布人员确认后提交 Git
+→ 获批平台部署网站
+```
+
+- 业务维护人员：只编辑共享 Excel，不需要安装 Python、Git，也不修改网站代码。
+- 发布人员：使用指定同步电脑运行同步、预览和发布。
+- 开发人员：维护同步程序、网站代码和文档。
+- 系统管理员 / IT：管理 Git、托管平台、访问权限和恢复流程。
+
+一个人可以兼任多个角色。第一阶段只允许一台指定同步电脑或一名指定发布人员执行正式推送。不要设置“Excel 保存后自动发布”，避免半成品直接上线。
 
 ## 首次安装
 
-### 业务维护电脑
+### 同步电脑
 
 1. 安装 Python 3。
 2. 获取完整项目文件夹。
@@ -41,7 +59,7 @@ git remote add origin <GitHub仓库地址>
 
 ## 修改 Excel
 
-正式数据默认位于 `excel/`：
+开发测试数据默认位于 `excel/`：
 
 - `ENTER 1-Basic Information.xlsx`
 - `ENTER 20-Certification Mark.xlsx`
@@ -56,6 +74,13 @@ git remote add origin <GitHub仓库地址>
 - ENTER3 的 A 列是标题，B 列是完整的 `http://` 或 `https://` 地址。
 - 没有内容时留空，不要填写 `/`。
 - 保存并关闭 Excel 后再同步，避免 Excel 锁文件阻止更新。
+
+### TEST EXCEL 与 PRODUCTION EXCEL
+
+- TEST EXCEL：开发环境可使用项目内的 `./excel`，不得替代正式业务数据。
+- PRODUCTION EXCEL：必须位于批准的 SharePoint / Teams 文档库、OneDrive for Business 同步目录或 Bosch 网络共享盘。
+- Git 仓库保存代码和已生成的网站版本，不把 Git 中的 Excel 当作正式多人维护入口。
+- 不要把整个 Git 项目放在共享盘中供多人共同编辑。
 
 ## 同步数据
 
@@ -90,6 +115,8 @@ Formal data replaced successfully.
 
 只有校验通过时才替换正式网站数据。同步失败不会覆盖上一次成功结果。
 
+同步开始时，程序会先将三份 Excel 复制到本地 `.build` 快照目录，记录文件路径、大小、修改时间、快照时间和 SHA-256。后续解析只读取快照。复制前后发现文件发生变化、快照哈希不一致或检测到 `~$` 临时锁文件时，同步立即停止。
+
 ## 本地预览
 
 双击：
@@ -116,39 +143,58 @@ http://localhost:8080
 
 不要直接双击 `index.html` 进行正式测试。浏览器的 `file://` 模式会阻止页面读取 JSON。
 
-## 提交 GitHub
+## 正式发布
 
 ### 推荐人工流程
 
-1. 修改并关闭 Excel。
+1. 业务人员修改、保存并确认共享 Excel。
+2. 发布人员确认 Git 工作区干净。
+3. 执行 `git pull --rebase origin main`；出现冲突时停止。
+4. 使用生产模式运行同步。
+5. 完成本地预览。
+6. 检查 Git 变更。
+7. 提交批准的网站文件。
+8. 推送到 `origin/main`。
+
+生产模式命令：
+
+```powershell
+python scripts/sync_excel.py --production
+```
+
+生产模式拒绝使用项目内的 `./excel`，必须先配置外部共享数据源。
+
+原有的简化人工流程仍可用于开发测试：
+
+1. 修改并关闭测试 Excel。
 2. 运行 `sync_website.bat`。
 3. 确认显示 `Validation: PASSED`。
 4. 运行 `preview_website.bat` 完成本地检查。
-5. 管理员检查 Git 变更。
-6. 提交批准的网站文件。
-7. 推送到 `origin/main`。
 
 管理员命令示例：
 
 ```powershell
 git status
-git add index.html logo.png data assets .github README.md requirements.txt scripts docs DATA_MAPPING.md STEP4_FINAL_REPORT.md config.example.json .gitignore .gitattributes sync.bat sync_website.bat preview_website.bat publish_website.bat
+git add index.html logo.png data assets .github README.md requirements.txt scripts tests docs DATA_MAPPING.md STEP4_FINAL_REPORT.md STEP6_FINAL_REPORT.md config.example.json .gitignore .gitattributes sync.bat sync_website.bat preview_website.bat publish_website.bat
 git commit -m "Update certification website"
 git push origin main
 ```
 
-也可以运行 `publish_website.bat`。该脚本会：
+正式发布推荐运行 `publish_website.bat`。该脚本会：
 
-- 先执行同步并检查退出码。
+- 要求开始时 Git 工作区干净。
+- 执行 `git pull --rebase origin main`，冲突时停止。
+- 使用 `--production` 从外部正式 Excel 创建快照并同步。
 - 同步失败时立即停止，不执行 Git 操作。
 - 要求用户确认已经完成本地预览。
 - 只暂存批准的网站和维护文件。
 - 创建提交前再次要求确认。
 - 推送 `origin/main` 前最后确认。
+- 只有远程推送成功后，才追加本机发布历史。
 
 它不会无条件自动推送。
 
-## GitHub Pages 部署
+## 可选的 GitHub Pages 测试部署
 
 项目包含：
 
@@ -156,7 +202,7 @@ git push origin main
 .github/workflows/deploy.yml
 ```
 
-管理员需要在 GitHub 仓库中打开：
+只有在 Bosch IT / 信息安全允许后，管理员才应在 GitHub 仓库中打开：
 
 ```text
 Settings → Pages → Build and deployment → Source → GitHub Actions
@@ -217,7 +263,7 @@ git push origin main
 
 推送回滚提交后，GitHub Pages 会自动重新部署上一版内容。
 
-## 数据源配置
+## 数据源与快照归档配置
 
 没有本地配置时，同步器默认读取：
 
@@ -241,7 +287,10 @@ Copy-Item config.example.json config.local.json
 
 ```json
 {
-  "excelSource": "./excel"
+  "excelSource": "./excel",
+  "productionMode": false,
+  "archiveSnapshots": false,
+  "archiveDirectory": ""
 }
 ```
 
@@ -249,7 +298,10 @@ Copy-Item config.example.json config.local.json
 
 ```json
 {
-  "excelSource": "S:/CertificationWebsite/Data"
+  "excelSource": "S:/CertificationWebsite/Data",
+  "productionMode": true,
+  "archiveSnapshots": true,
+  "archiveDirectory": "S:/CertificationWebsite/Archive"
 }
 ```
 
@@ -257,11 +309,23 @@ UNC 路径示例：
 
 ```json
 {
-  "excelSource": "\\\\bosch-server\\department\\CertificationWebsite\\Data"
+  "excelSource": "\\\\bosch-server\\department\\CertificationWebsite\\Data",
+  "productionMode": true,
+  "archiveSnapshots": true,
+  "archiveDirectory": "\\\\bosch-server\\department\\CertificationWebsite\\Archive"
 }
 ```
 
 `config.local.json` 已被 `.gitignore` 忽略。不要把真实公司共享盘路径、用户名、密码、Token 或凭证写入可提交文件。
+
+字段说明：
+
+- `excelSource`：三份正式 Excel 所在目录。
+- `productionMode`：设为 `true` 时启用正式数据源限制。
+- `archiveSnapshots`：是否在成功校验时保存本次 Excel 快照。
+- `archiveDirectory`：归档目录；启用归档但留空时，默认使用 Data 同级的 `Archive`。
+
+发布成功记录保存在本机 `logs/publish-history.jsonl`。日志和归档不进入 Git。
 
 ## 未来共享盘部署
 
@@ -278,6 +342,8 @@ UNC 路径示例：
 ```
 
 当前阶段不包含 OneDrive API、SharePoint API、Microsoft Graph、Webhook、定时任务、数据库或多人权限系统。
+
+完整架构见 `docs/production-architecture.md`，托管方案比较见 `docs/deployment-options.md`，生产异常处理见 `docs/operations.md`。最终生产平台需由 Bosch IT / 信息安全确认。
 
 ## 文件安全原则
 
