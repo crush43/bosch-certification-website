@@ -2,7 +2,7 @@
 
 认证网站由静态 HTML、JSON 和图片组成。Excel 数据层、同步器、生成文件和托管平台保持解耦。更换托管平台时，不应重写 Excel 解析和网站数据结构。
 
-最终生产平台需由 Bosch IT / 信息安全确认。本文件只比较技术适配性，不代表任何 Bosch 内部政策或批准结论。
+STEP 7 已确定使用 GitHub Pages，仓库为 Public。本文件保留此前的技术比较，并记录当前实际决策。
 
 ## 共同安全前提
 
@@ -21,27 +21,27 @@
 | SharePoint / Microsoft 365 静态资源方式 | 可保存文件，但直接托管完整静态站点的能力和脚本策略需验证 | 通常不需要公网 | 可使用 Microsoft 365 权限，具体限制需 IT 确认 | 中到高 | 中 | 中，可能需要调整页面托管方式，但 Excel 同步器不变 |
 | 其他公司批准平台 | 取决于平台 | 取决于平台 | 取决于平台 | 待评估 | 待评估 | 只要支持静态文件，通常较高 |
 
-## 当前建议
+## 当前正式决策
 
-1. 正式 Excel 优先存放在 Teams 背后的 SharePoint 文档库、OneDrive for Business 同步目录或 Bosch 网络共享盘。
-2. 指定一台同步电脑和一名发布负责人。
-3. 同步电脑通过 `config.local.json` 指向共享 Excel。
-4. 发布人员运行生产同步、预览并确认。
-5. 将生成文件提交到 Private Git 仓库。
-6. 由 Bosch IT / 信息安全选择并批准最终托管平台。
+1. 网站部署平台为 GitHub Pages。
+2. GitHub 仓库为 Public。
+3. Pages Source 为 GitHub Actions，使用 `.github/workflows/deploy.yml`。
+4. 正式 Excel 将存放在 Bosch Windows Network Shared Drive。
+5. 真实 UNC 路径仍为 PENDING / NOT CONNECTED，将在 STEP 8 配置。
+6. 指定一台同步电脑和一名发布负责人。
 
-GitHub Pages 当前只作为可选测试发布方案，不是默认生产结论。仓库保持 Private，程序不会自动修改仓库可见性或启用公网发布。
+线上地址：`https://crush43.github.io/bosch-certification-website/`
 
-## SharePoint / OneDrive 预留方式
+## Bosch Network Shared Drive 预留方式
 
 优先采用本地同步目录：
 
 ```text
-SharePoint / Teams 文档库
-→ OneDrive 同步到指定 Windows 目录
+Bosch Windows Network Shared Drive
+→ 真实 UNC Data 目录
 → config.local.json 的 excelSource
 → 本地 snapshot
 → Excel 校验与网站生成
 ```
 
-此方式不需要 Microsoft Graph、OAuth 或 Token。只有本地同步目录无法满足要求时，才评估 API 集成。
+此方式不需要 Microsoft Graph、OAuth 或 Token。实际 UNC 路径尚未提供，不得使用模拟路径替代正式配置。

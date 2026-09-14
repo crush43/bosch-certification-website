@@ -114,7 +114,7 @@ if errorlevel 2 (
   exit /b 0
 )
 
-git add -- index.html logo.png data assets .github README.md requirements.txt scripts tests docs DATA_MAPPING.md STEP4_FINAL_REPORT.md STEP6_FINAL_REPORT.md config.example.json .gitignore .gitattributes sync.bat sync_website.bat preview_website.bat publish_website.bat
+git add -- index.html logo.png data assets .github README.md requirements.txt scripts tests docs DATA_MAPPING.md PROJECT_HANDOFF.md STEP4_FINAL_REPORT.md STEP6_FINAL_REPORT.md STEP7_FINAL_REPORT.md config.example.json .gitignore .gitattributes sync.bat sync_website.bat preview_website.bat publish_website.bat
 if errorlevel 1 (
   echo [BLOCKED] Git staging failed. Nothing will be pushed.
   pause

@@ -1,6 +1,6 @@
 # 博世认证网站维护说明
 
-这是一个静态认证信息网站。认证工程师维护 Excel，脚本将 Excel 转换为网站使用的 JSON 和图片，再发布到经过 Bosch IT / 信息安全批准的静态托管平台。GitHub Pages 目前只是可选测试方案，不是默认生产结论。
+这是一个静态认证信息网站。认证工程师维护 Excel，脚本将 Excel 转换为网站使用的 JSON 和图片，再发布到 GitHub Pages。仓库当前为 Public，线上地址为 `https://crush43.github.io/bosch-certification-website/`。
 
 ```text
 Excel → 数据同步与校验 → JSON/图片 → 本地预览 → Git提交 → 获批的静态托管平台
@@ -175,7 +175,7 @@ python scripts/sync_excel.py --production
 
 ```powershell
 git status
-git add index.html logo.png data assets .github README.md requirements.txt scripts tests docs DATA_MAPPING.md STEP4_FINAL_REPORT.md STEP6_FINAL_REPORT.md config.example.json .gitignore .gitattributes sync.bat sync_website.bat preview_website.bat publish_website.bat
+git add index.html logo.png data assets .github README.md requirements.txt scripts tests docs DATA_MAPPING.md PROJECT_HANDOFF.md STEP4_FINAL_REPORT.md STEP6_FINAL_REPORT.md STEP7_FINAL_REPORT.md config.example.json .gitignore .gitattributes sync.bat sync_website.bat preview_website.bat publish_website.bat
 git commit -m "Update certification website"
 git push origin main
 ```
@@ -194,7 +194,7 @@ git push origin main
 
 它不会无条件自动推送。
 
-## 可选的 GitHub Pages 测试部署
+## GitHub Pages 正式部署
 
 项目包含：
 
@@ -202,7 +202,7 @@ git push origin main
 .github/workflows/deploy.yml
 ```
 
-只有在 Bosch IT / 信息安全允许后，管理员才应在 GitHub 仓库中打开：
+当前仓库已经设置：
 
 ```text
 Settings → Pages → Build and deployment → Source → GitHub Actions
@@ -225,7 +225,11 @@ Pages artifact 只包含：
 
 Excel、日志、快照、本地配置、Python 缓存和开发脚本不会进入 Pages artifact。
 
-部署完成后，在 GitHub 的 `Actions` 页面打开最新的部署任务，可以看到实际 Pages URL。
+部署完成后，在 GitHub 的 `Actions` 页面检查最新部署任务。正式 Pages URL 为：
+
+```text
+https://crush43.github.io/bosch-certification-website/
+```
 
 ## 同步失败怎么办
 
@@ -327,23 +331,23 @@ UNC 路径示例：
 
 发布成功记录保存在本机 `logs/publish-history.jsonl`。日志和归档不进入 Git。
 
-## 未来共享盘部署
+## 未来 Bosch 网络共享盘接入
 
 未来正式架构可以保持现有同步核心不变：
 
 ```text
-博世共享盘或 SharePoint 同步目录
+Bosch Windows Network Shared Drive（真实 UNC 路径待提供）
 → config.local.json 的 excelSource
 → 本地 snapshot
 → Excel 校验与同步
 → JSON和图片
 → 人工审核
-→ GitHub或内部静态托管
+→ GitHub Pages
 ```
 
 当前阶段不包含 OneDrive API、SharePoint API、Microsoft Graph、Webhook、定时任务、数据库或多人权限系统。
 
-完整架构见 `docs/production-architecture.md`，托管方案比较见 `docs/deployment-options.md`，生产异常处理见 `docs/operations.md`。最终生产平台需由 Bosch IT / 信息安全确认。
+完整架构见 `docs/production-architecture.md`，部署决策记录见 `docs/deployment-options.md`，生产异常处理见 `docs/operations.md`。真实 Bosch UNC 路径将在 STEP 8 接入。
 
 ## 文件安全原则
 

@@ -6,7 +6,7 @@
 > 本地项目：`E:\bosch`  
 > GitHub：`crush43/bosch-certification-website`  
 > 分支：`main`  
-> 仓库可见性：`Private`
+> 仓库可见性：`Public`
 
 ## 1. 交接文件用途
 
@@ -24,12 +24,12 @@
 | GitHub repo | `bosch-certification-website` |
 | Remote | `https://github.com/crush43/bosch-certification-website.git` |
 | Branch | `main` |
-| Visibility | `Private` |
+| Visibility | `Public` |
 | STEP 6 基线 commit | `032f8fc81106de302fa3afcebdfca461c9ce4dc3` |
 | STEP 6 commit message | `feat: add controlled shared-Excel production workflow` |
 | STEP 6 核对时 remote main | 与本地 `HEAD` 一致 |
 
-本文件创建后的实际最新 commit 应以 `git log` 为准。不要将仓库自动改为 Public。
+本文件创建后的实际最新 commit 应以 `git log` 为准。仓库已按用户授权改为 Public；未经新的明确决定，不要再次改变可见性。
 
 ## 3. PROJECT ROADMAP
 
@@ -39,17 +39,17 @@
 | STEP 2 | JSON Schema | COMPLETED |
 | STEP 3 | Excel Sync Engine / Excel → JSON 与图片同步器 | COMPLETED |
 | STEP 4 | Website JSON Integration | COMPLETED AND VERIFIED |
-| STEP 5 | Git / GitHub / Deployment Foundation | PARTIALLY COMPLETED |
+| STEP 5 | Git / GitHub / Deployment Foundation | COMPLETED AND VERIFIED |
 | STEP 6 | Multi-user Excel / Production Safety | COMPLETED AND VERIFIED |
-| STEP 7 | Production Deployment Decision & Go-Live / 正式部署环境确定与上线 | NOT STARTED — NEXT |
-| STEP 8 | Real Bosch Shared Data Source Integration | PLANNED |
+| STEP 7 | Production Deployment Decision & Go-Live / 正式部署环境确定与上线 | COMPLETED AND VERIFIED |
+| STEP 8 | Real Bosch Shared Data Source Integration | NOT STARTED — NEXT |
 | STEP 9 | UAT / Failure / Recovery Testing | PLANNED |
 | STEP 10 | Production Handover / Operations / Training | PLANNED |
 | STEP 11 | Advanced Automation | OPTIONAL |
 
-STEP 7 不是默认“部署 GitHub Pages”。正式平台尚未决定，可能是 GitHub Pages、Bosch Internal Web Server、SharePoint / Microsoft 365，或其他 Bosch 批准的平台。
+STEP 7 已正式选择并完成 GitHub Pages 部署。仓库公开及当前生成网站数据公开已经得到用户明确授权。
 
-STEP 8 将接入真实 Bosch Shared Source，可能采用 SharePoint 同步目录、OneDrive for Business 同步目录或网络共享盘。Microsoft Graph API 不是当前默认方案。
+STEP 8 将接入真实 Bosch Windows Network Shared Drive，使用 UNC 路径作为唯一正式 Excel 数据源。实际 UNC 路径仍为 PENDING / NOT CONNECTED，不得伪造。Microsoft Graph API 不是当前方案。
 
 STEP 11 只属于可选增强，未来可能包括定时同步、自动部署、SharePoint API、Microsoft Graph、CI/CD、通知与监控；当前不得提前实现。
 
@@ -165,7 +165,7 @@ Excel 临时新增 Test Link
 
 ## 8. STEP 5 — Git / GitHub / Deployment Foundation
 
-状态：PARTIALLY COMPLETED
+状态：COMPLETED AND VERIFIED
 
 子状态：
 
@@ -174,9 +174,9 @@ Excel 临时新增 Test Link
 | Local Git | COMPLETED |
 | GitHub Repository | COMPLETED |
 | Push main | COMPLETED |
-| GitHub Pages Online Deployment | NOT COMPLETED |
+| GitHub Pages Online Deployment | COMPLETED AND VERIFIED |
 
-当前仓库为 `crush43/bosch-certification-website`，默认分支为 `main`，仓库保持 Private，代码已经成功推送。
+当前仓库为 `crush43/bosch-certification-website`，默认分支为 `main`，仓库为 Public，代码已经成功推送。
 
 当前实际部署基础设施包括：
 
@@ -189,7 +189,7 @@ Excel 临时新增 Test Link
 - `scripts/validate_site.py`
 - `README.md`
 
-`.github/workflows/deploy.yml` 是 GitHub Pages 的可选部署工作流。工作流存在不代表 Pages 已启用或已验收。GitHub Pages 当前状态仍是 NOT DEPLOYED，因此 STEP 5 不能标为全部完成。
+`.github/workflows/deploy.yml` 是当前正式 GitHub Pages 部署工作流。Pages Source 已设置为 GitHub Actions；首次正式部署和真实线上验收均已通过。
 
 ## 9. STEP 6 — Shared Excel / Production Safety
 
@@ -239,10 +239,8 @@ Excel 临时新增 Test Link
 ## 10. 目标生产架构
 
 ```text
-Bosch SharePoint
-/ OneDrive for Business
-/ Teams-backed SharePoint
-/ Bosch Network Shared Drive
+Bosch Windows Network Shared Drive
+实际 UNC 路径：PENDING / NOT CONNECTED
         ↓
 Single Source of Truth
 唯一正式 Excel
@@ -259,12 +257,12 @@ Preview
         ↓
 Manual Approval
         ↓
-Git / Deployment Platform
+Git / GitHub Pages
         ↓
 Website
 ```
 
-Excel 数据层、同步器、生成网站文件和托管平台保持解耦。更换托管平台时不应重写 Excel 解析器或已经验收的网站数据结构。
+Excel 数据层、同步器、生成网站文件和托管平台保持解耦。当前部署平台为 GitHub Pages；真实 Bosch 网络共享盘接入属于 STEP 8。
 
 ## 11. Single Source of Truth 与角色
 
@@ -295,57 +293,46 @@ C 本地正式 Excel
 - 生产 Excel 不应成为普通 Git 业务源。
 - `data/` 和 `assets/generated/` 是网站发布内容，但其公开性必须在部署前单独审核。
 
-## 13. SECURITY BLOCKER / DECISION POINT
+## 13. SECURITY DECISION
 
-状态：BLOCKED（仅针对“确定正式平台并发布真实数据到生产环境”）
+状态：COMPLETED
 
-仓库目前保持 Private。仓库中的网站运行数据可能包含 Bosch 内部链接、认证图片和生成后的业务数据。
+用户已明确决定并授权：
 
-在执行以下任一动作前：
+- 仓库 `crush43/bosch-certification-website` 改为 Public。
+- 当前生成的网站 JSON 和认证图片随仓库及 GitHub Pages 公开。
+- GitHub Pages 作为当前正式部署平台。
 
-- 将仓库转为 Public；
-- 启用面向公网的 GitHub Pages；
-- 将真实 Bosch 数据部署到其他公网环境；
-
-必须先完成：
-
-1. 业务数据公开性审核。
-2. Bosch IT / Information Security 确认。
-3. 正式托管平台及访问控制决定。
-
-不得因为仓库内已经存在 Pages workflow，就推断 GitHub Pages 已批准。Private Git 仓库也不等于最终网站天然具有内部访问控制。
+部署前安全检查确认 Git 未跟踪 Excel、`config.local.json`、日志、snapshot、Archive、环境文件、Token、私钥或凭据。正式 Excel 和未来真实 UNC 路径仍不得进入 Git 或 Pages artifact。
 
 ## 14. 部署平台决策
 
-GitHub Pages 当前只能视为 OPTIONAL deployment option，不是已确定的正式生产平台。
+Deployment Platform：GitHub Pages
 
-候选方案：
+Repository Visibility：PUBLIC
 
-| 方案 | 当前定位 |
-| --- | --- |
-| GitHub Pages | OPTIONAL；静态站点兼容度高，但公开性与企业账户能力必须审核 |
-| Bosch Internal Web Server | 候选；适合内网访问控制，需 IT 配置 HTTPS、权限、域名与运维 |
-| SharePoint / Microsoft 365 | 候选；身份权限可复用，但完整静态网站和脚本策略需实测 |
-| 其他 Bosch 批准的平台 | 候选；只要支持 HTML、JSON 和图片即可复用现有产物 |
+Pages Source：GitHub Actions
 
-选择依据和限制见 `docs/deployment-options.md`。不得替用户或 Bosch IT 提前决定。
+Workflow：`.github/workflows/deploy.yml`
+Online URL：`https://crush43.github.io/bosch-certification-website/`
+
+首次正式成功 run：`34795233358`。build 与 deploy 均为 success；checkout、Pages 配置、站点校验、精简 `_site` 构建、artifact 上传和 Pages 部署均成功。
 
 ## 15. 已知限制与待确认事项
 
-- 正式 Excel 的最终共享位置及权限组尚未确认。
+- 正式 Excel 已确定使用 Bosch Windows Network Shared Drive，但实际 UNC 路径及权限组尚未提供。
 - 指定同步电脑和发布负责人尚未确认。
 - Archive 的正式位置、保留周期、访问权限和备份策略尚未确认。
-- GitHub Private 仓库是否允许长期保存当前生成 JSON、图片及内部链接，需要 Bosch IT / 信息安全确认。
-- GitHub Actions 是否允许使用尚未确认。
-- 正式托管平台和访问范围尚未确认。
-- 如要求仅内部访问，身份认证和网络边界尚未确定。
+- GitHub 仓库已为 Public，当前生成 JSON、图片及链接已按用户决定公开。
+- GitHub Actions 与 GitHub Pages 已启用并验证。
+- 正式部署平台已经确定为 GitHub Pages。
 - 正式发布审批、审计责任人、HTTPS、域名、日志和灾备要求尚未确定。
-- 当前没有接入真实 Bosch 共享 Excel；STEP 6 使用的是隔离的模拟共享源测试。
+- 当前没有接入真实 Bosch 网络共享盘；实际 UNC 路径为 PENDING / NOT CONNECTED。
 
 ## CURRENT EXACT STOP POINT
 
 ```text
-STEP 6:
+STEP 7:
 COMPLETED AND VERIFIED
 
 Git:
@@ -355,32 +342,32 @@ Remote main:
 SYNCED
 
 Repository:
-PRIVATE
+PUBLIC
 
 GitHub Pages:
-NOT DEPLOYED
+DEPLOYED AND VERIFIED
 
-STEP 7:
+STEP 8:
 NOT STARTED
 
 CURRENT NEXT ACTION:
-STEP 7 — 正式部署环境确定与上线
+STEP 8 — Real Bosch Shared Data Source Integration
 ```
 
-在确认部署平台和数据公开性之前，不得直接发布真实 Bosch 数据到公网。未经用户确认，不得进入 STEP 7。
+真实 Bosch Network Shared Drive 的 UNC 路径尚未提供。未经用户确认和真实路径，不得进入 STEP 8，也不得创建假的生产路径。
 
-## 17. STEP 7 启动条件
+## 17. STEP 8 启动条件
 
-STEP 7 的目标是“确定正式部署环境并完成上线”，不是预设部署 GitHub Pages。
+STEP 8 的目标是接入真实 Bosch Windows Network Shared Drive，并验证正式生产同步与发布链。
 
-启动前至少需要用户或 Bosch 相关负责人确认：
+启动前至少需要用户或 Bosch 相关负责人提供或确认：
 
-1. 网站数据允许的访问范围：公网、Bosch 内网或指定账号。
-2. Bosch IT / 信息安全批准的托管平台。
-3. 当前生成 JSON、图片和内部链接能否进入该平台。
-4. 谁负责正式部署验收与上线批准。
+1. 真实 UNC Data 路径。
+2. 发布电脑对 Data 和可选 Archive 的访问权限。
+3. 三份规范文件名的正式 Excel 已放入该唯一 Data 目录。
+4. 正式同步、预览和发布责任人。
 
-在以上决定完成前，可以继续做只读核对和非敏感方案比较，但不得发布真实 Bosch 数据到公网。
+没有真实路径时保持 NOT STARTED，不使用模拟地址替代。
 
 ## NEW CHAT RECOVERY PROTOCOL
 
@@ -472,19 +459,22 @@ git log
 | `DATA_MAPPING.md` | Excel、JSON 与页面字段映射及图片规则 |
 | `STEP4_FINAL_REPORT.md` | 网站 JSON 接入与端到端验收 |
 | `STEP6_FINAL_REPORT.md` | 多人维护和生产安全最终报告 |
+| `STEP7_FINAL_REPORT.md` | GitHub Pages 上线和真实线上验收报告 |
 | `docs/data-schema.md` | JSON 数据结构定义 |
 | `docs/production-architecture.md` | 多人维护生产架构、角色与并发控制 |
 | `docs/operations.md` | 发布、异常、回滚和恢复操作 |
 | `docs/deployment-options.md` | 托管平台比较与安全前提 |
 | `README.md` | 项目日常维护入口 |
 | `config.example.json` | 可提交的本地配置模板 |
-| `.github/workflows/deploy.yml` | 可选 GitHub Pages 部署工作流 |
+| `.github/workflows/deploy.yml` | 正式 GitHub Pages 部署工作流 |
 
 ## 24. 本交接基线生成时的核对结论
 
-- STEP 6 = COMPLETED AND VERIFIED
-- STEP 7 = NOT STARTED
-- GitHub Pages = NOT DEPLOYED
-- Repository = Private
-- Next Step = STEP 7 — 正式部署环境确定与上线
-- 当前不得进入 STEP 7
+- STEP 7 = COMPLETED AND VERIFIED
+- STEP 8 = NOT STARTED
+- GitHub Pages = DEPLOYED AND VERIFIED
+- Repository = Public
+- Production Excel Source Strategy = Bosch Windows Network Shared Drive
+- Real Shared Drive = PENDING / NOT CONNECTED
+- Next Step = STEP 8 — Real Bosch Shared Data Source Integration
+- 当前不得进入 STEP 8

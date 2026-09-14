@@ -6,7 +6,7 @@
 业务维护人员（多人）
         │
         ▼
-SharePoint / Teams / OneDrive 同步目录 / Bosch 网络共享盘
+Bosch Windows Network Shared Drive（真实 UNC 路径待提供）
 唯一正式 Data 目录（三份 Excel）
         │
         ▼
