@@ -175,7 +175,7 @@ python scripts/sync_excel.py --production
 
 ```powershell
 git status
-git add index.html logo.png data assets .github README.md requirements.txt scripts tests docs DATA_MAPPING.md PROJECT_HANDOFF.md STEP4_FINAL_REPORT.md STEP6_FINAL_REPORT.md STEP7_FINAL_REPORT.md config.example.json .gitignore .gitattributes sync.bat sync_website.bat preview_website.bat publish_website.bat
+git add index.html logo.png data assets .github README.md requirements.txt scripts tests docs DATA_MAPPING.md PROJECT_HANDOFF.md STEP4_FINAL_REPORT.md STEP6_FINAL_REPORT.md STEP7_FINAL_REPORT.md STEP9_FINAL_REPORT.md config.example.json .gitignore .gitattributes sync.bat sync_website.bat preview_website.bat publish_website.bat
 git commit -m "Update certification website"
 git push origin main
 ```

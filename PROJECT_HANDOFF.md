@@ -42,9 +42,9 @@
 | STEP 5 | Git / GitHub / Deployment Foundation | COMPLETED AND VERIFIED |
 | STEP 6 | Multi-user Excel / Production Safety | COMPLETED AND VERIFIED |
 | STEP 7 | Production Deployment Decision & Go-Live / 正式部署环境确定与上线 | COMPLETED AND VERIFIED |
-| STEP 8 | Real Bosch Shared Data Source Integration | NOT STARTED — NEXT |
-| STEP 9 | UAT / Failure / Recovery Testing | PLANNED |
-| STEP 10 | Production Handover / Operations / Training | PLANNED |
+| STEP 8 | Real Bosch Shared Data Source Integration | NOT STARTED — WAITING FOR REAL BOSCH NETWORK SHARED DRIVE PATH |
+| STEP 9 | UAT / Failure / Recovery Testing | COMPLETED AND VERIFIED (NON-PRODUCTION SHARED SOURCE) |
+| STEP 10 | Production Handover / Operations / Training | NOT STARTED |
 | STEP 11 | Advanced Automation | OPTIONAL |
 
 STEP 7 已正式选择并完成 GitHub Pages 部署。仓库公开及当前生成网站数据公开已经得到用户明确授权。
@@ -52,6 +52,8 @@ STEP 7 已正式选择并完成 GitHub Pages 部署。仓库公开及当前生�
 STEP 8 将接入真实 Bosch Windows Network Shared Drive，使用 UNC 路径作为唯一正式 Excel 数据源。实际 UNC 路径仍为 PENDING / NOT CONNECTED，不得伪造。Microsoft Graph API 不是当前方案。
 
 STEP 11 只属于可选增强，未来可能包括定时同步、自动部署、SharePoint API、Microsoft Graph、CI/CD、通知与监控；当前不得提前实现。
+
+STEP 9 已在没有真实 Bosch 共享盘的前提下完成全部 17 项可执行 UAT、失败与恢复测试。真实 UNC 连通性、权限、延迟、断连和现场多人编辑仍必须在 STEP 8 完成后补测。
 
 ## 4. STEP 1 — Data Mapping
 
@@ -236,7 +238,24 @@ Excel 临时新增 Test Link
 - `README.md`
 - `tests/test_sync_safety.py`
 
-## 10. 目标生产架构
+## 10. STEP 9 — UAT / Failure / Recovery Testing
+
+状态：COMPLETED AND VERIFIED (NON-PRODUCTION SHARED SOURCE)
+
+已完成 17 / 17 项可执行测试：正常同步、锁文件、缺失 Excel、损坏表头、非法 URL、必填缺失、snapshot 期间源变化、坏 JSON、缺图、dirty worktree、非 main、remote/pull 失败、push 失败、Pages 部署失败与恢复、git revert、Archive 恢复、发布历史条件、数据源不可达及正式 Pages 浏览器 UAT。
+
+关键结论：
+
+- 各类同步失败均不会替换上一版正式 JSON 和 generated assets。
+- 发布脚本能区分本地成功、push 失败和部署平台失败。
+- `git revert` 可在保留历史的情况下恢复已知良好内容。
+- 模拟 Archive 的三份 Excel 与 manifest 哈希一致，并成功恢复出 4 / 7 / 3 / 39 基准网站。
+- 正式 Pages 在 Chrome 中通过首页、筛选、搜索、图片、链接、多语言、移动端和受控加载失败测试。
+- 实际 Bosch Network Shared Drive 尚未连接；本轮只使用本地隔离源模拟不可达和归档场景。
+
+详细证据见 `STEP9_FINAL_REPORT.md`。真实共享盘 UAT 必须在 STEP 8 完成后补充。
+
+## 11. 目标生产架构
 
 ```text
 Bosch Windows Network Shared Drive
@@ -264,7 +283,7 @@ Website
 
 Excel 数据层、同步器、生成网站文件和托管平台保持解耦。当前部署平台为 GitHub Pages；真实 Bosch 网络共享盘接入属于 STEP 8。
 
-## 11. Single Source of Truth 与角色
+## 12. Single Source of Truth 与角色
 
 未来正式 Excel 只能有一套，多名业务人员共同维护同一个正式数据源。
 
@@ -285,7 +304,7 @@ C 本地正式 Excel
 
 第一阶段采用指定同步电脑或指定发布人员的单点发布方式，不实现分布式发布锁，也不将“保存 Excel”与自动发布绑定。
 
-## 12. 代码与业务数据分离
+## 13. 代码与业务数据分离
 
 - Git 仓库管理代码和允许进入版本库的生成网站数据。
 - Shared Drive / SharePoint 管理唯一正式 Excel。
@@ -293,7 +312,7 @@ C 本地正式 Excel
 - 生产 Excel 不应成为普通 Git 业务源。
 - `data/` 和 `assets/generated/` 是网站发布内容，但其公开性必须在部署前单独审核。
 
-## 13. SECURITY DECISION
+## 14. SECURITY DECISION
 
 状态：COMPLETED
 
@@ -305,7 +324,7 @@ C 本地正式 Excel
 
 部署前安全检查确认 Git 未跟踪 Excel、`config.local.json`、日志、snapshot、Archive、环境文件、Token、私钥或凭据。正式 Excel 和未来真实 UNC 路径仍不得进入 Git 或 Pages artifact。
 
-## 14. 部署平台决策
+## 15. 部署平台决策
 
 Deployment Platform：GitHub Pages
 
@@ -318,7 +337,7 @@ Online URL：`https://crush43.github.io/bosch-certification-website/`
 
 首次正式成功 run：`34795233358`。build 与 deploy 均为 success；checkout、Pages 配置、站点校验、精简 `_site` 构建、artifact 上传和 Pages 部署均成功。
 
-## 15. 已知限制与待确认事项
+## 16. 已知限制与待确认事项
 
 - 正式 Excel 已确定使用 Bosch Windows Network Shared Drive，但实际 UNC 路径及权限组尚未提供。
 - 指定同步电脑和发布负责人尚未确认。
@@ -328,12 +347,13 @@ Online URL：`https://crush43.github.io/bosch-certification-website/`
 - 正式部署平台已经确定为 GitHub Pages。
 - 正式发布审批、审计责任人、HTTPS、域名、日志和灾备要求尚未确定。
 - 当前没有接入真实 Bosch 网络共享盘；实际 UNC 路径为 PENDING / NOT CONNECTED。
+- STEP 9 的本地模拟共享源、Archive 和故障恢复测试已经通过，但不能替代真实 UNC 环境的权限、网络稳定性、并发编辑和正式恢复演练。
 
 ## CURRENT EXACT STOP POINT
 
 ```text
-STEP 7:
-COMPLETED AND VERIFIED
+STEP 9:
+COMPLETED AND VERIFIED (NON-PRODUCTION SHARED SOURCE)
 
 Git:
 PUSHED
@@ -348,15 +368,18 @@ GitHub Pages:
 DEPLOYED AND VERIFIED
 
 STEP 8:
+NOT STARTED — WAITING FOR REAL BOSCH NETWORK SHARED DRIVE PATH
+
+STEP 10:
 NOT STARTED
 
-CURRENT NEXT ACTION:
-STEP 8 — Real Bosch Shared Data Source Integration
+CURRENT NEXT ACTION WHEN REQUIRED INPUT IS AVAILABLE:
+STEP 8 — Real Bosch Shared Data Source Integration, then supplement real shared-drive UAT
 ```
 
-真实 Bosch Network Shared Drive 的 UNC 路径尚未提供。未经用户确认和真实路径，不得进入 STEP 8，也不得创建假的生产路径。
+真实 Bosch Network Shared Drive 的 UNC 路径尚未提供。未经真实路径不得进入 STEP 8，也不得创建假的生产路径。本轮在 STEP 9 收尾后停止，不进入 STEP 10。
 
-## 17. STEP 8 启动条件
+## 18. STEP 8 启动条件
 
 STEP 8 的目标是接入真实 Bosch Windows Network Shared Drive，并验证正式生产同步与发布链。
 
@@ -460,6 +483,7 @@ git log
 | `STEP4_FINAL_REPORT.md` | 网站 JSON 接入与端到端验收 |
 | `STEP6_FINAL_REPORT.md` | 多人维护和生产安全最终报告 |
 | `STEP7_FINAL_REPORT.md` | GitHub Pages 上线和真实线上验收报告 |
+| `STEP9_FINAL_REPORT.md` | UAT、失败与恢复测试及真实 Pages 浏览器验收报告 |
 | `docs/data-schema.md` | JSON 数据结构定义 |
 | `docs/production-architecture.md` | 多人维护生产架构、角色与并发控制 |
 | `docs/operations.md` | 发布、异常、回滚和恢复操作 |
@@ -471,10 +495,12 @@ git log
 ## 24. 本交接基线生成时的核对结论
 
 - STEP 7 = COMPLETED AND VERIFIED
-- STEP 8 = NOT STARTED
+- STEP 8 = NOT STARTED — WAITING FOR REAL BOSCH NETWORK SHARED DRIVE PATH
+- STEP 9 = COMPLETED AND VERIFIED (NON-PRODUCTION SHARED SOURCE)
+- STEP 10 = NOT STARTED
 - GitHub Pages = DEPLOYED AND VERIFIED
 - Repository = Public
 - Production Excel Source Strategy = Bosch Windows Network Shared Drive
 - Real Shared Drive = PENDING / NOT CONNECTED
-- Next Step = STEP 8 — Real Bosch Shared Data Source Integration
-- 当前不得进入 STEP 8
+- Next Step when real UNC is available = STEP 8 — Real Bosch Shared Data Source Integration
+- Current stop = STEP 9 complete; do not enter STEP 10

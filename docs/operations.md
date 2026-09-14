@@ -112,3 +112,15 @@ PUBLISH SUCCESS / HISTORY RECORD FAILED
 ## 托管平台故障
 
 Git push 成功不等于网站部署成功。发布人员还必须检查获批托管平台的部署结果和实际页面。托管失败时，Git 中的发布版本仍可追踪，但应标记为“代码已推送，部署失败”。
+
+### GitHub Pages 部署失败恢复
+
+1. 打开仓库 Actions，找到与刚推送 commit 对应的 `Deploy certification website to GitHub Pages` run。
+2. 记录失败 run ID、commit SHA、失败 job 和失败 step；不要把 Git push 成功误记为网站发布成功。
+3. 保留 Git 历史和本地提交，不使用强制 push，不删除当前仍可用的上一版 Pages。
+4. 若失败发生在 `Configure GitHub Pages`，由仓库管理员确认 Pages Source 为 GitHub Actions、Pages 已启用、workflow 权限可用。
+5. 若失败发生在网站校验或构建，先在本地修复 Excel / JSON / 图片并通过 `scripts/validate_site.py`，再提交修复版本。
+6. 修复后重新运行失败 workflow 或推送修复提交，等待 build 与 deploy 均显示 success。
+7. 访问正式 URL，确认首页、三个 JSON、图片、ENTER1/2/3 和浏览器控制台正常，再把状态更新为发布成功。
+
+在平台恢复前，线上继续使用上一版成功部署内容。若错误版本已经上线，按“回退上一版本”使用 `git revert` 创建可追踪恢复提交。
