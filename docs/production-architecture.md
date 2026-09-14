@@ -29,7 +29,7 @@ config.local.json → 本地临时 snapshot → 校验 → JSON / 图片
 CertificationWebsite/
 ├── Data/
 │   ├── ENTER 1-Basic Information.xlsx
-│   ├── ENTER 20-Certification Mark.xlsx
+│   ├── ENTER 2-Certification Mark.xlsx
 │   └── ENTER 3-Reference Link.xlsx
 ├── Archive/
 ├── Publish/

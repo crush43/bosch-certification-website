@@ -37,7 +37,7 @@ from validators import (
 
 
 E1_FILE = "ENTER 1-Basic Information.xlsx"
-E2_FILE = "ENTER 20-Certification Mark.xlsx"
+E2_FILE = "ENTER 2-Certification Mark.xlsx"
 E3_FILE = "ENTER 3-Reference Link.xlsx"
 E1_SHEET = "铭牌信息"
 E2_SHEET = "Certification Mark"

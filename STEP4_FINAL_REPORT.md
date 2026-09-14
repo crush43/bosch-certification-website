@@ -380,7 +380,7 @@ UI 菜单和固定说明仍然有中、英、德三种语言。
 
 ```text
 excel/ENTER 1-Basic Information.xlsx
-excel/ENTER 20-Certification Mark.xlsx
+excel/ENTER 2-Certification Mark.xlsx
 excel/ENTER 3-Reference Link.xlsx
 ```
 

@@ -62,7 +62,7 @@ git remote add origin <GitHub仓库地址>
 开发测试数据默认位于 `excel/`：
 
 - `ENTER 1-Basic Information.xlsx`
-- `ENTER 20-Certification Mark.xlsx`
+- `ENTER 2-Certification Mark.xlsx`
 - `ENTER 3-Reference Link.xlsx`
 
 修改规则：

@@ -96,6 +96,14 @@ Sheet + Anchor + Header
 
 状态：COMPLETED
 
+当前三份 Excel 的规范文件名：
+
+- `ENTER 1-Basic Information.xlsx`
+- `ENTER 2-Certification Mark.xlsx`
+- `ENTER 3-Reference Link.xlsx`
+
+ENTER2 此前误写的文件编号已经统一更正。同步器、测试源、原始材料副本、数据元信息和维护文档均使用当前规范名称；历史运行日志仍保留运行当时的真实文件名，不作为当前配置来源。
+
 已经建立以下安全同步链：
 
 ```text
@@ -480,4 +488,3 @@ git log
 - Repository = Private
 - Next Step = STEP 7 — 正式部署环境确定与上线
 - 当前不得进入 STEP 7
-

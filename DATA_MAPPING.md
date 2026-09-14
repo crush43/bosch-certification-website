@@ -10,7 +10,7 @@
 |---|---|---|
 | `index.html` | 当前网站原型 | 单文件 SPA；业务数据硬编码为 `D1`、`D2`、`D3` |
 | `附件/ENTER 1-Basic Information.xlsx` | ENTER1 数据源 | 3 个 Sheet；`铭牌信息` 有效，范围 `A2:S7`，实际数据行 3–6 |
-| `附件/ENTER 20-Certification Mark.xlsx` | ENTER2 数据源 | Sheet `Certification Mark`，范围 `A1:F8`，数据行 2–8 |
+| `附件/ENTER 2-Certification Mark.xlsx` | ENTER2 数据源 | Sheet `Certification Mark`，范围 `A1:F8`，数据行 2–8 |
 | `附件/ENTER 3-Reference Link.xlsx` | ENTER3 数据源 | Sheet `Reference Link`，范围 `A1:B5`，有效数据行 1、3、5 |
 | `设计要求.txt` | 初始需求 | 三级筛选、Corded/Cordless、完整铭牌及分区信息 |
 | `附件/新要求.txt` | 三模块需求 | HOME + ENTER1/2/3、跨模块导航、统一备注 |
@@ -139,7 +139,7 @@ Excel
 
 ### 4.1 Sheet 与列映射
 
-- 文件：`附件/ENTER 20-Certification Mark.xlsx`
+- 文件：`附件/ENTER 2-Certification Mark.xlsx`
 - Sheet：`Certification Mark`
 - 表头行：第 1 行
 - 数据行：第 2–8 行
