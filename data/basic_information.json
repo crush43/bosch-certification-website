@@ -49,24 +49,7 @@
     "ip": "",
     "protect": [],
     "other": [],
-    "extraFields": [
-      {
-        "column": 20,
-        "label": {
-          "zh": "大巴神",
-          "en": "",
-          "de": ""
-        },
-        "value": {
-          "zh": "",
-          "en": "",
-          "de": ""
-        },
-        "images": [
-          "assets/generated/enter1/e1_87ae895894e0_extra_c20_01.png"
-        ]
-      }
-    ]
+    "extraFields": []
   },
   {
     "id": "e1_d633ddd1a01f",
@@ -117,22 +100,7 @@
     "other": [
       "assets/generated/enter1/e1_d633ddd1a01f_other_01.png"
     ],
-    "extraFields": [
-      {
-        "column": 20,
-        "label": {
-          "zh": "大巴神",
-          "en": "",
-          "de": ""
-        },
-        "value": {
-          "zh": "",
-          "en": "",
-          "de": ""
-        },
-        "images": []
-      }
-    ]
+    "extraFields": []
   },
   {
     "id": "e1_004ae792188b",
@@ -179,22 +147,7 @@
     "ip": "IPX4",
     "protect": [],
     "other": [],
-    "extraFields": [
-      {
-        "column": 20,
-        "label": {
-          "zh": "大巴神",
-          "en": "",
-          "de": ""
-        },
-        "value": {
-          "zh": "",
-          "en": "",
-          "de": ""
-        },
-        "images": []
-      }
-    ]
+    "extraFields": []
   },
   {
     "id": "e1_25d8be6dbd4a",
@@ -247,91 +200,6 @@
     "other": [
       "assets/generated/enter1/e1_25d8be6dbd4a_other_01.png"
     ],
-    "extraFields": [
-      {
-        "column": 20,
-        "label": {
-          "zh": "大巴神",
-          "en": "",
-          "de": ""
-        },
-        "value": {
-          "zh": "",
-          "en": "",
-          "de": ""
-        },
-        "images": []
-      }
-    ]
-  },
-  {
-    "id": "e1_ae83d9ef6cd6",
-    "country": {
-      "zh": "俄罗斯",
-      "en": "",
-      "de": ""
-    },
-    "category": {
-      "zh": "工业电器",
-      "en": "",
-      "de": ""
-    },
-    "product": {
-      "zh": "手枪钻",
-      "en": "",
-      "de": ""
-    },
-    "powerType": "Corded",
-    "example": [
-      "assets/generated/enter1/e1_ae83d9ef6cd6_example_01.png"
-    ],
-    "model": "GAS 12-25 PL",
-    "bareModel": "3601JM6002",
-    "specs": "220V 50Hz 1300W",
-    "dateCode": "MM/YYYY",
-    "cert": [
-      "assets/generated/enter1/e1_ae83d9ef6cd6_cert_01.png"
-    ],
-    "eco": [],
-    "origin": [
-      "assets/generated/enter1/e1_ae83d9ef6cd6_origin_01.png"
-    ],
-    "class2": [
-      "assets/generated/enter1/e1_ae83d9ef6cd6_class2_01.png"
-    ],
-    "manufacturer": [
-      "assets/generated/enter1/e1_ae83d9ef6cd6_manufacturer_01.png"
-    ],
-    "weee": [
-      "assets/generated/enter1/e1_ae83d9ef6cd6_weee_01.png"
-    ],
-    "manual": [
-      "assets/generated/enter1/e1_ae83d9ef6cd6_manual_01.png"
-    ],
-    "ip": "IPX4",
-    "protect": [
-      "assets/generated/enter1/e1_ae83d9ef6cd6_protect_01.png"
-    ],
-    "other": [
-      "assets/generated/enter1/e1_ae83d9ef6cd6_other_01.png"
-    ],
-    "extraFields": [
-      {
-        "column": 20,
-        "label": {
-          "zh": "大巴神",
-          "en": "",
-          "de": ""
-        },
-        "value": {
-          "zh": "",
-          "en": "",
-          "de": ""
-        },
-        "images": [
-          "assets/generated/enter1/e1_ae83d9ef6cd6_extra_c20_01.png"
-        ]
-      }
-    ]
+    "extraFields": []
   }
 ]
