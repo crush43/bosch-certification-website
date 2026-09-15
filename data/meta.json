@@ -1,40 +1,40 @@
 {
-  "generatedAt": "2026-09-15T21:25:07+08:00",
+  "generatedAt": "2026-09-15T22:33:51+08:00",
   "status": "success",
   "sources": {
     "basicInformation": {
       "file": "ENTER 1-Basic Information.xlsx",
-      "size": 658834,
-      "modifiedAt": "2026-09-14T21:20:14+08:00",
-      "snapshotAt": "2026-09-15T21:25:06+08:00",
-      "sha256": "c497f18ad063823955e76f205c9b026a56fec5a87323030110436335c6e59acb",
-      "records": 4
+      "size": 696410,
+      "modifiedAt": "2026-09-15T22:29:34+08:00",
+      "snapshotAt": "2026-09-15T22:33:51+08:00",
+      "sha256": "78f4b9c39d6071264963ff0821cf86db1840b82c4e797f27045729dc0965aa65",
+      "records": 5
     },
     "certificationMarks": {
       "file": "ENTER 2-Certification Mark.xlsx",
-      "size": 82651,
-      "modifiedAt": "2026-06-16T14:34:40+08:00",
-      "snapshotAt": "2026-09-15T21:25:06+08:00",
-      "sha256": "115ca22d3d4eb183d71fff6a5a64f5fca5cfdc1b7ba1baa03a0fe3fd9dd6a926",
-      "records": 7
+      "size": 82910,
+      "modifiedAt": "2026-09-15T22:33:45+08:00",
+      "snapshotAt": "2026-09-15T22:33:51+08:00",
+      "sha256": "5bba3527f2eeca2c743bb5efac9ecf8c175142fd93e7844c51f180fb9ce1bc72",
+      "records": 8
     },
     "referenceLinks": {
       "file": "ENTER 3-Reference Link.xlsx",
       "size": 9465,
       "modifiedAt": "2026-06-16T13:32:52+08:00",
-      "snapshotAt": "2026-09-15T21:25:06+08:00",
+      "snapshotAt": "2026-09-15T22:33:51+08:00",
       "sha256": "ab461b6c29da76cf0138f8c1ac43e50fb494a761b10658a7fd8fe5fea8f75381",
       "records": 3
     }
   },
   "images": {
-    "enter1Objects": 32,
-    "enter1Logical": 32,
-    "enter1DuplicatesRemoved": 0,
-    "enter2Objects": 7,
-    "enter2Logical": 7,
+    "enter1Objects": 45,
+    "enter1Logical": 43,
+    "enter1DuplicatesRemoved": 2,
+    "enter2Objects": 8,
+    "enter2Logical": 8,
     "enter2DuplicatesRemoved": 0,
-    "totalLogical": 39
+    "totalLogical": 51
   },
-  "warnings": 0
+  "warnings": 2
 }

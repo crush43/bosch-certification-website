@@ -159,5 +159,28 @@
       "en": "",
       "de": ""
     }
+  },
+  {
+    "id": "e2_161111b099",
+    "country": {
+      "zh": "英国",
+      "en": "",
+      "de": ""
+    },
+    "name": "China RoHS II for noncompliance",
+    "drawing": "161111B099",
+    "image": [
+      "assets/generated/enter2/e2_161111b099_01.png"
+    ],
+    "notes": {
+      "zh": "1.尺寸: 从 (500+50) mm的距离用正常视力观察时，标记必须清晰可辨\n2.格式: 必须使用可以在GIS中下载的模板",
+      "en": "",
+      "de": ""
+    },
+    "products": {
+      "zh": "危险材料不超过危险限值的电动工具",
+      "en": "",
+      "de": ""
+    }
   }
 ]
