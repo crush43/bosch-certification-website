@@ -48,7 +48,8 @@
     ],
     "ip": "",
     "protect": [],
-    "other": []
+    "other": [],
+    "extraFields": []
   },
   {
     "id": "e1_d633ddd1a01f",
@@ -98,7 +99,8 @@
     ],
     "other": [
       "assets/generated/enter1/e1_d633ddd1a01f_other_01.png"
-    ]
+    ],
+    "extraFields": []
   },
   {
     "id": "e1_004ae792188b",
@@ -144,7 +146,8 @@
     ],
     "ip": "IPX4",
     "protect": [],
-    "other": []
+    "other": [],
+    "extraFields": []
   },
   {
     "id": "e1_25d8be6dbd4a",
@@ -196,6 +199,7 @@
     ],
     "other": [
       "assets/generated/enter1/e1_25d8be6dbd4a_other_01.png"
-    ]
+    ],
+    "extraFields": []
   }
 ]

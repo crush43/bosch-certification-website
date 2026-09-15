@@ -2,7 +2,7 @@
 
 > 本文件是本项目后续 ChatGPT / Codex 新聊天的项目状态主索引。
 >
-> 最后核对日期：2026-09-14  
+> 最后核对日期：2026-09-15
 > 本地项目：`E:\bosch`  
 > GitHub：`crush43/bosch-certification-website`  
 > 分支：`main`  
@@ -126,6 +126,8 @@ Atomic / Safe Replacement
 
 同步失败不得覆盖上一版正式 `data/` 和 `assets/generated/`。
 
+ENTER1 已支持动态新增列：固定 A–S 表头保持兼容，其他使用非空、唯一表头的列会按 Excel 从左到右顺序生成 `extraFields`。新增列可包含文字、锚定图片或两者，不需要再修改同步代码。
+
 当前实际脚本：
 
 - `scripts/sync_excel.py`：同步总入口、构建与安全替换。
@@ -140,6 +142,8 @@ Atomic / Safe Replacement
 状态：COMPLETED AND VERIFIED
 
 `index.html` 已取消将 `D1`、`D2`、`D3` 硬编码业务数据作为权威源。页面现在通过 `fetch()` 加载四个 JSON 文件，并提供 Loading、错误提示和 `meta.json` 更新时间显示。
+
+ENTER1 的“铭牌各区域详解”支持读取 `extraFields`：新列从字段 14 开始，按 Excel 列顺序追加在原有 13 个区块之后，沿用现有详情卡片的文字和图片样式。
 
 当前验收基准：
 

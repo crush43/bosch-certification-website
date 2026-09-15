@@ -64,7 +64,15 @@
     ],
     "ip": "",
     "protect": [],
-    "other": []
+    "other": [],
+    "extraFields": [
+      {
+        "column": 20,
+        "label": { "zh": "新增字段", "en": "", "de": "" },
+        "value": { "zh": "新增内容", "en": "", "de": "" },
+        "images": []
+      }
+    ]
   }
 ]
 ```
@@ -93,6 +101,16 @@
 | `ip` | string | Excel `IP等级` |
 | `protect` | string[] | Excel `防护标志` |
 | `other` | string[] | Excel `其他特殊标签` |
+| `extraFields` | ExtraField[] | ENTER1 中不属于 A–S 固定字段的新增列，按 Excel 从左到右顺序生成，并在页面字段 13 后依次展示 |
+
+`ExtraField` 结构：
+
+- `column`：Excel 实际列号，用于保持顺序和生成稳定图片文件名。
+- `label`：新增列的表头，按 LocalizedText 保存；当前来源只写中文。
+- `value`：该记录在新增列中的单元格文字，按 LocalizedText 保存。
+- `images`：锚定在该记录、新增列单元格中的全部图片；同锚点不同内容全部保留，相同内容去重。
+
+新增列无需修改同步代码或页面模板。同步后，网站会把它们作为新的“铭牌各区域详解”卡片，按 Excel 列顺序排列在原有 13 个区块之后。新增列必须有非空且唯一的表头。
 
 ## `data/certification_marks.json`
 

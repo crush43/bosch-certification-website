@@ -536,6 +536,16 @@ function imgBox(src,alt){
   return '<div class="dimg-box"><span class="dimg-empty">'+t('noImg')+'</span></div>';
 }
 function fieldBlock(num,name,body){return '<div class="dblock"><div class="dblock-head"><span class="dnum">'+num+'</span><span class="dname">'+name+'</span></div><div class="dbody">'+body+'</div></div>';}
+function renderExtraFields(item){
+  if(!Array.isArray(item.extraFields))return '';
+  return item.extraFields.map((field,index)=>{
+    const label=L(field.label)||t('na');
+    const value=L(field.value);
+    const images=Array.isArray(field.images)?field.images:[];
+    const body=(images.length?imgBox(images,label):'')+(value?'<div class="dval">'+esc(value)+'</div>':(!images.length?'<div class="dval">'+t('na')+'</div>':''));
+    return fieldBlock(14+index,esc(label),body);
+  }).join('');
+}
 function renderE1(){
   initE1Filters();
   const items=getE1Filtered();
@@ -564,6 +574,7 @@ function renderE1(){
       +fieldBlock(11,t('fIP'),'<div class="dval">'+(it.ip||t('na'))+'</div>')
       +fieldBlock(12,t('fProtect'),imgBox(it.protect,t('fProtect')))
       +fieldBlock(13,t('fOther'),imgBox(it.other,t('fOther')))
+      +renderExtraFields(it)
       +'</div></div>';
   }).join('');
 }

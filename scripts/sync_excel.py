@@ -64,6 +64,15 @@ E2_HEADERS = ["国家", "标志", "图纸编号", "标志示意图", "关键备�
 E2_IMAGE_HEADERS = {"标志示意图": "image"}
 
 
+def enter1_extra_headers(headers: dict[str, int]) -> list[tuple[str, int]]:
+    """Return non-core ENTER1 columns in their left-to-right Excel order."""
+    core = set(E1_HEADERS)
+    return sorted(
+        ((header, column) for header, column in headers.items() if header not in core),
+        key=lambda item: item[1],
+    )
+
+
 def load_local_config(project_root: Path) -> tuple[dict[str, Any], str | None]:
     """Load local-only runtime settings without requiring a configuration file."""
     local_config = project_root / "config.local.json"
@@ -153,10 +162,20 @@ def build_enter1(path: Path, output_root: Path, issues: Issues) -> tuple[list[di
     worksheet = get_sheet(workbook, E1_SHEET, E1_FILE, issues)
     if worksheet is None:
         return [], {"objects": 0, "logical": 0, "duplicates": 0}, []
+    seen_headers: set[str] = set()
+    duplicate_headers: set[str] = set()
+    for cell in worksheet[2]:
+        header = clean_text(cell.value)
+        if header and header in seen_headers:
+            duplicate_headers.add(header)
+        seen_headers.add(header)
+    for header in sorted(duplicate_headers):
+        issues.error(E1_FILE, E1_SHEET, 2, header, "Duplicate header is not allowed")
     headers = header_map(worksheet, 2)
     validate_headers(headers, E1_HEADERS, issues, E1_FILE, E1_SHEET)
-    if any(header not in headers for header in E1_HEADERS):
+    if duplicate_headers or any(header not in headers for header in E1_HEADERS):
         return [], {"objects": 0, "logical": 0, "duplicates": 0}, []
+    extra_headers = enter1_extra_headers(headers)
 
     records: list[dict] = []
     by_row: dict[int, dict] = {}
@@ -189,6 +208,15 @@ def build_enter1(path: Path, output_root: Path, issues: Issues) -> tuple[list[di
             "ip": value("IP等级"),
             "protect": [],
             "other": [],
+            "extraFields": [
+                {
+                    "column": column,
+                    "label": localized_zh(header),
+                    "value": localized_zh(clean_text(worksheet.cell(row, column).value)),
+                    "images": [],
+                }
+                for header, column in extra_headers
+            ],
         }
         records.append(record)
         by_row[row] = record
@@ -212,16 +240,20 @@ def build_enter1(path: Path, output_root: Path, issues: Issues) -> tuple[list[di
 
     logical, duplicate_count = deduplicate_anchors(anchors, duplicate_warning)
     column_to_header = {column: header for header, column in headers.items()}
+    extra_by_column = {column: index for index, (_, column) in enumerate(extra_headers)}
     grouped: dict[tuple[int, str], list[ImageAnchor]] = defaultdict(list)
+    extra_grouped: dict[tuple[int, int], list[ImageAnchor]] = defaultdict(list)
     for anchor in logical:
         header = column_to_header.get(anchor.column)
         field = E1_IMAGE_HEADERS.get(header or "")
         if anchor.row not in by_row:
             issues.error(E1_FILE, anchor.sheet, anchor.row, anchor.cell, "Image points to no data record")
-        elif not field:
-            issues.error(E1_FILE, anchor.sheet, anchor.row, header or anchor.cell, "Image is anchored to an unsupported field")
-        else:
+        elif field:
             grouped[(anchor.row, field)].append(anchor)
+        elif anchor.column in extra_by_column:
+            extra_grouped[(anchor.row, extra_by_column[anchor.column])].append(anchor)
+        else:
+            issues.error(E1_FILE, anchor.sheet, anchor.row, header or anchor.cell, "Image is anchored to an unsupported field")
 
     generated: list[Path] = []
     for (row, field), field_anchors in sorted(grouped.items()):
@@ -230,6 +262,20 @@ def build_enter1(path: Path, output_root: Path, issues: Issues) -> tuple[list[di
             relative = Path("assets") / "generated" / "enter1" / f"{record['id']}_{field}_{index:02}.png"
             save_as_png(anchor.content, output_root / relative)
             record[field].append(relative.as_posix())
+            generated.append(relative)
+
+    for (row, extra_index), field_anchors in sorted(extra_grouped.items()):
+        record = by_row[row]
+        extra = record["extraFields"][extra_index]
+        for index, anchor in enumerate(field_anchors, start=1):
+            relative = (
+                Path("assets")
+                / "generated"
+                / "enter1"
+                / f"{record['id']}_extra_c{extra['column']}_{index:02}.png"
+            )
+            save_as_png(anchor.content, output_root / relative)
+            extra["images"].append(relative.as_posix())
             generated.append(relative)
 
     return records, {

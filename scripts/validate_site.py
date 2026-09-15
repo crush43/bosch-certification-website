@@ -50,7 +50,15 @@ def main() -> int:
 
     images: list[str] = []
     for record in basic:
-        for value in record.values():
+        for key, value in record.items():
+            if key == "extraFields":
+                if not isinstance(value, list):
+                    raise RuntimeError(f"ENTER1 extraFields is not an array: {record.get('id', '?')}")
+                for field in value:
+                    if not isinstance(field, dict) or not isinstance(field.get("images", []), list):
+                        raise RuntimeError(f"ENTER1 extra field is invalid: {record.get('id', '?')}")
+                    images.extend(item for item in field.get("images", []) if isinstance(item, str))
+                continue
             if isinstance(value, list):
                 images.extend(item for item in value if isinstance(item, str))
     for record in marks:
